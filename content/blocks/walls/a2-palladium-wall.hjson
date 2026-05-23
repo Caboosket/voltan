@@ -13,15 +13,15 @@ lightningLength: 6
 lightningDamage: 12
 
 requirements: [
-  palladium/6
+  vw-2-palladium/6
 ]
 
 research: {
   researchCostMultiplier: 0.3
   parent: a0-silver-wall
-  objectives: [palladium]
+  objectives: [vw-2-palladium]
   requirements: [
-    palladium/200
+    vw-2-palladium/200
   ]
 }
 
