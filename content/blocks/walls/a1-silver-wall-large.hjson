@@ -9,15 +9,15 @@ envEnabled: [any]
 chanceDeflect: 0.14
 
 requirements: [
-  silver/24
+  vw-1-silver/24
 ]
 
 research: {
   researchCostMultiplier: 0.3
   parent: a0-silver-wall
-  objectives: [silver]
+  objectives: [vw-1-silver]
   requirements: [
-    silver/700
+    vw-1-silver/700
   ]
 }
 
