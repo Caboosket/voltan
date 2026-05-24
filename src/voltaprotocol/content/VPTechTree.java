@@ -21,9 +21,6 @@ public class VPTechTree {
         if (rootBlock != null) {
             TechTree.nodeRoot("volta-protocol-tech-tree", rootBlock, () -> {
 
-                // ==========================================
-                // RAMA 1: MATERIALES (Nacen del núcleo)
-                // ==========================================
                 if (VPItems.silver != null) {
                     TechTree.nodeProduce(VPItems.silver, () -> {
                         
@@ -36,7 +33,7 @@ public class VPTechTree {
                             });
                         }
                     });
-                } // <--- AQUI CIERRA LA RAMA DE LA PLATA
+                }
 
                 TechTree.node(VPBlocks.silverWall, () -> {
                     TechTree.node(VPBlocks.silverWallLarge);
