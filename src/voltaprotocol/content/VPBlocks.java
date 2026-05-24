@@ -55,7 +55,7 @@ public class VPBlocks {
             localizedName = "Muro de Paladio";
             health = 600;
             armor = 3f;
-            insulated = true; // Aislante eléctrico
+            insulated = true;
             
             lightningChance = 0.09f;
             lightningLength = 6;
