@@ -9,11 +9,12 @@ public class RegenerativeWall extends Wall {
     public float regenDelay = 180f;
     public float maxHeal = 10f;
 
-    public RegenerativeWall(String name, int size, int health, float healAmount, float maxHeal) {
+    public RegenerativeWall(String name, int size, int health, float armor, float healAmount, float maxHeal) {
         super(name);
 
         this.size = size;
         this.health = health;
+        this.armor = armor;
         this.healAmount = healAmount;
         this.maxHeal = maxHeal;
 
