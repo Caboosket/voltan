@@ -9,7 +9,7 @@ health: 1850
 shootSound: shootDiffuse
 shootSoundVolume: 0.8
 
-range: 260
+range: 240
 reload: 20
 inaccuracy: 4
 recoil: 1.5
@@ -92,6 +92,8 @@ ammoTypes: {
     type: BasicBulletType
     speed: 7.5
     damage: 55
+    reloadMultiplier: 0.85
+    rangeChange: 15
     width: 11
     height: 16
     collidesAir: true
@@ -108,6 +110,8 @@ ammoTypes: {
     type: BasicBulletType
     speed: 9.5
     damage: 50
+    reloadMultiplier: 1.0
+    rangeChange: 25
     width: 10
     height: 18
     pierce: true
@@ -126,6 +130,8 @@ ammoTypes: {
     type: FlakBulletType
     speed: 9
     damage: 25
+    reloadMultiplier: 1.15
+    rangeChange: 20
     collidesGround: true
     splashDamage: 40
     splashDamageRadius: 30
@@ -148,12 +154,14 @@ ammoTypes: {
     type: BasicBulletType
     speed: 8.5
     damage: 40
+    reloadMultiplier: 1.20
+    rangeChange: -10
     width: 11
     height: 15
     collidesAir: true
     collidesGround: true
     splashDamage: 32
-    splashDamageRadius: 35
+    splashDamageRadius: 23
     buildingDamageMultiplier: 0.4
     status: melting
     statusDuration: 120
@@ -169,6 +177,8 @@ ammoTypes: {
     type: BasicBulletType
     speed: 7
     damage: 30
+    reloadMultiplier: 1.25
+    rangeChange: -15
     width: 12
     height: 14
     collidesAir: true
