@@ -1,5 +1,4 @@
 name: Build Mod
-
 on: [push, pull_request]
 
 jobs:
