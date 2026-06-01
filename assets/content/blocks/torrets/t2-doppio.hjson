@@ -28,8 +28,6 @@ consumes: {
 
 drawer: {
   type: DrawTurret
-  heat: -heat
-
   parts: [
     {
       type: RegionPart
