@@ -1,15 +1,41 @@
 package voltaprotocol.content;
 
 import arc.util.Log;
+import mindustry.content.StatusEffects;
+import mindustry.graphics.CacheLayer;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.Wall;
+import mindustry.world.blocks.environment.Floor;
+import mindustry.world.blocks.environment.OreBlock;
+import mindustry.world.blocks.environment.StaticWall;
+import mindustry.world.blocks.environment.SteamVent;
 import mindustry.world.meta.BuildVisibility;
 import voltaprotocol.world.blocks.defense.RegenerativeWall;
+import mindustry.world.meta.Attribute;
 
 public class VPBlocks {
-
+//environment
+   //tiles
+    public static Floor argentAndesite;
+    public static Floor conductiveSand;
+    public static Floor darkAndesite;
+    //fosas
+    public static Floor oxychlorideFloor;
+    //Muros relieve
+    public static StaticWall argentAndesiteWall;
+    public static StaticWall conductiveSandWall;
+    public static StaticWall darkAndesiteWall;
+    //Calor-ventila
+    public static Floor pyroclasticAndesite;
+    public static Floor voltaicMagma;
+    public static SteamVent voltaicGeyser;
+    //ores
+    public static OreBlock silverOre;
+    public static OreBlock palladiumOre;
+//bloques construibles
+    //defence
     public static Block vpTemporalTT;
     public static Wall silverWall;
     public static Wall silverWallLarge;
@@ -20,6 +46,92 @@ public class VPBlocks {
 
     public static void load(){
         Log.info("[Volta Protocol] Cargando bloques y configurando ingeniería defensiva...");
+
+        argentAndesite = new Floor("env-argent-andesite-vp"){{
+            localizedName = "Andesita Argenta";
+            variants = 4;
+        }};
+
+        conductiveSand = new Floor("env-conductive-sand-vp"){{
+            localizedName = "Arena Conductora";
+            variants = 3;
+            speedMultiplier = 0.9f;
+        }};
+
+        darkAndesite = new Floor("env-dark-andesite-vp"){{
+            localizedName = "Andesita Oscura";
+            variants = 3;
+        }};
+
+        oxychlorideFloor = new Floor("env-oxychloride-floor"){{
+            localizedName = "Oxicloruro superficial";
+            isLiquid = true;
+            liquidDrop = VPLiquids.oxychloride;
+            liquidMultiplier = 1.5f;
+            variants = 0;
+            speedMultiplier = 0.75f;
+            status = StatusEffects.corroded;
+            statusDuration = 90f;
+            cacheLayer = CacheLayer.water; 
+            blendGroup = mindustry.content.Blocks.water;
+            oreDefault = false;
+        }};
+
+        argentAndesiteWall = new StaticWall("env-argent-andesite-wall"){{
+            localizedName = "Muro de Andesita Argenta";
+            variants = 2;
+        }};
+
+        conductiveSandWall = new StaticWall("env-conductive-sand-wall"){{
+            localizedName = "Muro de Arena Conductora";
+            variants = 2;
+            attributes.set(Attribute.sand, 1f);
+        }};
+
+        darkAndesiteWall = new StaticWall("env-dark-andesite-wall"){{
+            localizedName = "Muro de Andesita Oscura";
+            variants = 2;
+        }};
+
+        pyroclasticAndesite = new Floor("env-pyroclastic-andesite"){{
+            localizedName = "Andesita Piroclastica";
+            variants = 3;
+            speedMultiplier = 0.8f;
+            attributes.set(Attribute.heat, 0.5f); 
+            emitLight = true;
+            lightRadius = 40f;
+            lightColor = arc.graphics.Color.valueOf("e05316").a(0.2f);
+            oreDefault = false;
+        }};
+
+        voltaicMagma = new Floor("env-voltaic-magma"){{
+            localizedName = "Magma Voltaico";
+            variants = 3;
+            speedMultiplier = 0.5f;
+            attributes.set(Attribute.heat, 1.0f); 
+            emitLight = true;
+            lightRadius = 65f;
+            lightColor = arc.graphics.Color.valueOf("ff4500").a(0.4f);
+            oreDefault = false;
+        }};
+
+        voltaicGeyser = new SteamVent("env-voltaic-geyser"){{
+            localizedName = "Geiser voltaico";
+            variants = 0;
+            attributes.set(Attribute.steam, 2.0f);
+            parent = darkAndesite;
+            oreDefault = false;
+        }};
+
+        silverOre = new OreBlock("vp-silver-ore", VPItems.silver){{
+            localizedName = "Mena de plata";
+            variants = 3;
+        }};
+
+        palladiumOre = new OreBlock("vp-palladium-ore", VPItems.palladium){{
+            localizedName = "Mena de paladio";
+            variants = 3;
+        }};
 
         vpTemporalTT = new Block("vp-temporal-tt"){{
             localizedName = "Volta Protocol Core";
