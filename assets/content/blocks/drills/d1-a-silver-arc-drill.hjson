@@ -28,7 +28,7 @@ requirements: [
 category: production
 
 research: {
-  parent: d0-silver-drill
+  parent: d0-a-silver-drill
   requirements: [
     graphite/300
     silicon/500
