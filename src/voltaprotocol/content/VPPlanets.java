@@ -25,13 +25,15 @@ public class VPPlanets {
                 new HexSkyMesh(this, 3, 0.22f, 0.12f, 6, Color.valueOf("73003e"), 3, 0.38f, 1.2f, 0.40f)
             );
 
-            atmosphereColor = Color.valueOf("4a1231");
-            atmosphereRadIn = 0.03f;
-            atmosphereRadOut = 0.30f;
+            atmosphereColor = Color.valueOf("73003e");
+            atmosphereRadIn = 0.02f;
+            atmosphereRadOut = 0.25f;
 
-            lightColor = Color.valueOf("c19393"); 
+            generator = new VoltaPlanetGenerator(); 
+            allowLaunchToNumbered = true;
+            defaultCore = Blocks.coreShard;
+            startSector = 0;
 
-            startSector = 0; 
             techTree = TechTree.all.find(t -> t.content == Blocks.coreShard);
         }};
     }
