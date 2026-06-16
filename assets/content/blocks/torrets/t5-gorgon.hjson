@@ -66,6 +66,7 @@ ammoTypes: {
   vw-1-silver: {
     type: BasicBulletType
     speed: 9
+    lifetime: 29
     damage: 80
     width: 10
     height: 16
@@ -89,6 +90,7 @@ ammoTypes: {
   vw-2-palladium: {
     type: BasicBulletType
     speed: 11
+    lifetime: 27.5
     damage: 160
     width: 12
     height: 24
@@ -157,6 +159,7 @@ ammoTypes: {
   tungsten: {
     type: BasicBulletType
     speed: 12
+    lifetime: 22
     damage: 150
     width: 14
     height: 26
