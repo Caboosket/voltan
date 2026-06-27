@@ -99,6 +99,7 @@ scrap: {
   width: 7
   height: 10
   homingPower: 0.08
+  reloadMultiplier: 1.45
   ammoMultiplier: 2
   buildingDamageMultiplier: 0.2
  }
