@@ -28,78 +28,85 @@ import voltaprotocol.content.VPBlocks;
 public class VoltaPlanetGenerator extends PlanetGenerator {
 
     BaseGenerator basegen = new BaseGenerator();
-    public static final Color andesitaOscura    = Color.valueOf("2d2d31");
-    public static final Color plataConductiva   = Color.valueOf("9aa4b2");
-    public static final Color miasmaConcentrado = Color.valueOf("3a0d25");
-    public static final Color nieveCumbre       = Color.valueOf("dce8f0");
-    public static final Color oxicloruroColor   = Color.valueOf("2a5c3f");
-    public static final Color musgoSerpulo      = Color.valueOf("4a2060");
-    public static final Color arenaOscuraColor  = Color.valueOf("3d3228");
+
+    public static final Color andesitaOscura    = Color.valueOf("2d2228");
+    public static final Color plataConductiva   = Color.valueOf("b88aa0");
+    public static final Color miasmaConcentrado = Color.valueOf("6e0f44");
+    public static final Color nieveCumbre       = Color.valueOf("f0a8c8");
+    public static final Color oxicloruroColor   = Color.valueOf("3a1530");
+    public static final Color musgoSerpulo      = Color.valueOf("9c1062");
+    public static final Color arenaOscuraColor  = Color.valueOf("3d2a32");
+    public static final Color violetaProfundo   = Color.valueOf("5a1a52");
+    public static final Color rosaApagado       = Color.valueOf("8a5468");
     public static Interp interp = new Interp.Exp(2, 3);
 
     @Override
     public float getHeight(Vec3 position) {
-        float noise    = Simplex.noise3d(seed, 3, 0.5f, 0.3f, position.x, position.y, position.z);
-        float latitude = Math.abs(position.y);
-        return Mathf.clamp(noise * 0.5f + latitude * 0.4f, 0.05f, 0.95f);
+        float noise      = Simplex.noise3d(seed, 3, 0.5f, 0.3f, position.x, position.y, position.z);
+        float latitude   = Math.abs(position.y);
+        float poleFactor = (float) Math.pow(latitude, 8);
+        return Mathf.clamp(noise * 0.72f + poleFactor * 0.18f, 0.05f, 0.95f);
     }
 
     public Color getColor(Vec3 position) {
-        float depth = getHeight(position);
-        float patch = Simplex.noise3d(seed + 50, 3, 0.4f, 0.5f,
-                position.x * 2, position.y * 2, position.z * 2);
+        float depth   = getHeight(position);
+        float patch   = Simplex.noise3d(seed + 50,  3, 0.4f, 0.5f, position.x * 2, position.y * 2, position.z * 2);
+        float detailA = Simplex.noise3d(seed + 80,  2, 0.5f, 0.8f, position.x * 3, position.y * 3, position.z * 3);
+        float detailB = Simplex.noise3d(seed + 130, 2, 0.6f, 0.6f, position.x * 4, position.y * 4 + 1f, position.z * 4);
+        float micro   = Simplex.noise3d(seed + 220, 2, 0.55f, 1.2f, position.x * 6, position.y * 6, position.z * 6);
 
-        float detailA = Simplex.noise3d(seed + 80, 2, 0.5f, 0.8f,
-                position.x * 3, position.y * 3, position.z * 3);
-        float detailB = Simplex.noise3d(seed + 130, 2, 0.6f, 0.6f,
-                position.x * 4, position.y * 4 + 1f, position.z * 4);
+        float latitude    = Math.abs(position.y);
+        float poleEdge    = Simplex.noise3d(seed + 300, 2, 0.5f, 1.5f, position.x * 3, position.y * 3, position.z * 3) * 0.04f;
+        boolean isPoleCap = latitude > (0.92f - poleEdge);
 
         Color base;
+        Color blend    = null;
+        float blendAmt = 0f;
 
-        if (depth > 0.85f) {
-            base = nieveCumbre;
-        } else if (depth > 0.78f && patch > 0.3f) {
-            base = Tmp.c2.set(nieveCumbre).lerp(plataConductiva, 0.4f);
-        }
-        else if (depth < 0.45f && detailB > 0.72f) {
-            base = oxicloruroColor;
-        }
-        else if (depth > 0.30f && depth < 0.60f && detailA > 0.60f && patch < 0.35f) {
-            base = musgoSerpulo;
-        }
-        else if (depth < 0.38f && patch > 0.50f && detailA < 0.40f) {
+        if (isPoleCap) {
+            base     = nieveCumbre;
+            blend    = plataConductiva;
+            blendAmt = Mathf.clamp((latitude - 0.92f) / 0.08f) * 0.25f;
+        } else if (depth > 0.82f && patch > 0.35f) {
+            base = Tmp.c2.set(nieveCumbre).lerp(plataConductiva, 0.55f);
+        } else if (depth < 0.45f && detailB > 0.74f) {
+            base     = oxicloruroColor;
+            blend    = violetaProfundo;
+            blendAmt = Mathf.clamp((detailB - 0.74f) / 0.18f) * 0.35f;
+        } else if (depth > 0.30f && depth < 0.60f && detailA > 0.62f && patch < 0.35f) {
+            base     = musgoSerpulo;
+            blend    = rosaApagado;
+            blendAmt = Mathf.clamp((detailA - 0.62f) / 0.28f) * 0.30f;
+        } else if (depth < 0.38f && patch > 0.52f && detailA < 0.40f) {
             base = arenaOscuraColor;
-        }
-        else if (patch > 0.45f) {
-            base = plataConductiva;
+        } else if (patch > 0.45f) {
+            base     = plataConductiva;
+            blend    = rosaApagado;
+            blendAmt = Mathf.clamp((patch - 0.45f) / 0.30f) * 0.25f;
         } else if (patch > 0.15f) {
-            base = miasmaConcentrado;
+            base     = miasmaConcentrado;
+            blend    = violetaProfundo;
+            blendAmt = Mathf.clamp((0.45f - patch) / 0.30f) * 0.20f;
         } else {
             base = andesitaOscura;
         }
 
-        return Tmp.c1.set(base).mul(Mathf.clamp(0.4f + depth * 0.6f, 0.3f, 1f));
+        Color result = new Color(base);
+        if (blend != null) result.lerp(blend, blendAmt);
+        result.lerp(detailB > 0f ? plataConductiva : violetaProfundo, Math.abs(micro) * 0.08f);
+        return Tmp.c1.set(result).mul(Mathf.clamp(0.30f + depth * 0.50f, 0.30f, 0.80f));
     }
 
-@Override
+    @Override
     public void genTile(Vec3 position, TileGen tile) {
-        float h     = getHeight(position);
-        float patch = Simplex.noise3d(seed + 50, 3, 0.4f, 0.5f,
-                position.x * 2, position.y * 2, position.z * 2);
-
-        float iceVar = Simplex.noise3d(seed + 110, 2, 0.6f, 0.6f,
-                position.x * 5, position.y * 5, position.z * 5);
+        float h      = getHeight(position);
+        float patch  = Simplex.noise3d(seed + 50,  3, 0.4f, 0.5f, position.x * 2, position.y * 2, position.z * 2);
+        float iceVar = Simplex.noise3d(seed + 110, 2, 0.6f, 0.6f, position.x * 5, position.y * 5, position.z * 5);
 
         if (h > 0.85f) {
-            if      (iceVar > 0.50f)  tile.floor = Blocks.ice;
-            else if (iceVar > 0.15f)  tile.floor = Blocks.iceSnow;
-            else                      tile.floor = Blocks.snow;
-
+            tile.floor = iceVar > 0.50f ? Blocks.ice : iceVar > 0.15f ? Blocks.iceSnow : Blocks.snow;
         } else if (h > 0.70f) {
-            if      (iceVar > 0.55f)  tile.floor = Blocks.ice;
-            else if (iceVar > 0.28f)  tile.floor = Blocks.iceSnow;
-            else                      tile.floor = Blocks.snow;
-
+            tile.floor = iceVar > 0.55f ? Blocks.ice : iceVar > 0.28f ? Blocks.iceSnow : Blocks.snow;
         } else if (patch > 0.60f) {
             tile.floor = VPBlocks.conductiveSand.asFloor();
         } else if (h > 0.45f) {
@@ -108,14 +115,14 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
             tile.floor = VPBlocks.darkAndesite.asFloor();
         }
 
-        if      (tile.floor == VPBlocks.argentAndesite)                 tile.block = VPBlocks.argentAndesiteWall;
-        else if (tile.floor == VPBlocks.conductiveSand)                 tile.block = VPBlocks.conductiveSandWall;
-        else if (tile.floor == VPBlocks.darkAndesite)                   tile.block = VPBlocks.darkAndesiteWall;
-        else if (tile.floor == Blocks.ice || tile.floor == Blocks.iceSnow) tile.block = Blocks.iceWall;
-        else if (tile.floor == Blocks.snow)                             tile.block = Blocks.snowWall;
-        else                                                            tile.block = tile.floor.asFloor().wall;
+        if      (tile.floor == VPBlocks.argentAndesite)                      tile.block = VPBlocks.argentAndesiteWall;
+        else if (tile.floor == VPBlocks.conductiveSand)                      tile.block = VPBlocks.conductiveSandWall;
+        else if (tile.floor == VPBlocks.darkAndesite)                        tile.block = VPBlocks.darkAndesiteWall;
+        else if (tile.floor == Blocks.ice || tile.floor == Blocks.iceSnow)   tile.block = Blocks.iceWall;
+        else if (tile.floor == Blocks.snow)                                  tile.block = Blocks.snowWall;
+        else                                                                 tile.block = tile.floor.asFloor().wall;
 
-        if (Ridged.noise3d(seed + 1, position.x, position.y, position.z, 2, 22) > 0.31f) {
+        if (Ridged.noise3d(seed + 1, position.x, position.y, position.z, 2, 22) > 0.42f) {
             tile.block = Blocks.air;
         }
     }
@@ -140,8 +147,7 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
                 int   stroke = rand.random(6, 11);
                 brush(
                     pathfind(x1, y1, x2, y2,
-                        t -> (t.solid() ? 50f : 0f)
-                           + noise(t.x, t.y, 2, 0.4f, 1f / nscl) * 500f,
+                        t -> (t.solid() ? 50f : 0f) + noise(t.x, t.y, 2, 0.4f, 1f / nscl) * 500f,
                         Astar.manhattan),
                     stroke
                 );
@@ -151,9 +157,7 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
                 if (!connected.add(to) || to == this) return;
                 Vec2 mid = Tmp.v1.set(to.x, to.y).add(x, y).scl(0.5f);
                 rand.nextFloat();
-
-                mid.add(Tmp.v2.setToRandomDirection(rand)
-                              .scl(Tmp.v1.dst(x, y) * 0.4f));
+                mid.add(Tmp.v2.setToRandomDirection(rand).scl(Tmp.v1.dst(x, y) * 0.4f));
                 mid.sub(width / 2f, height / 2f)
                    .limit(width / 2f / Mathf.sqrt3)
                    .add(width / 2f, height / 2f);
@@ -163,7 +167,9 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
             }
         }
 
-        float mapRadius = width / 2f / Mathf.sqrt3;
+        float mapRadius  = width / 2f / Mathf.sqrt3;
+        float cxCenter   = width  / 2f;
+        float cyCenter   = height / 2f;
         float constraint = 1.4f;
 
         int rooms = rand.random(4, 7);
@@ -171,26 +177,25 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
 
         for (int i = 0; i < rooms; i++) {
             Tmp.v1.trns(rand.random(360f), rand.random(mapRadius / constraint));
-            float rx   = width  / 2f + Tmp.v1.x;
-            float ry   = height / 2f + Tmp.v1.y;
+            float rx   = cxCenter + Tmp.v1.x;
+            float ry   = cyCenter + Tmp.v1.y;
             float maxr = mapRadius - Tmp.v1.len();
-
             float rrad = Math.min(rand.random(16f, maxr / 1.4f), 40f);
             roomseq.add(new Room((int) rx, (int) ry, (int) rrad));
         }
 
-        Room spawn = null;
-        Seq<Room> enemies = new Seq<>();
-        int   enemySpawns = rand.random(1, Math.max((int)(sector.threat * 4), 1));
-        int   offset      = rand.nextInt(360);
-        float spawnLength = width / 2.55f - rand.random(10, 20);
-        int   angleStep   = 5;
-        int   waterCheckR = 4;
+        Room      spawn       = null;
+        Seq<Room> enemies     = new Seq<>();
+        int       enemySpawns = rand.random(1, Math.max((int)(sector.threat * 4), 1));
+        int       offset      = rand.nextInt(360);
+        float     spawnLength = width / 2.55f - rand.random(10, 20);
+        int       angleStep   = 5;
+        int       waterCheckR = 4;
 
         for (int i = 0; i < 360; i += angleStep) {
             int angle = offset + i;
-            int cx = (int)(width  / 2 + Angles.trnsx(angle, spawnLength));
-            int cy = (int)(height / 2 + Angles.trnsy(angle, spawnLength));
+            int cx = (int)(cxCenter + Angles.trnsx(angle, spawnLength));
+            int cy = (int)(cyCenter + Angles.trnsy(angle, spawnLength));
 
             int waterTiles = 0;
             for (int rx = -waterCheckR; rx <= waterCheckR; rx++) {
@@ -202,15 +207,10 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
 
             if (waterTiles <= 4 || (i + angleStep >= 360)) {
                 roomseq.add(spawn = new Room(cx, cy, rand.random(14, 22)));
-
                 for (int j = 0; j < enemySpawns; j++) {
                     float eoff = rand.range(60f);
-                    Tmp.v1.set(cx - width / 2, cy - height / 2)
-                          .rotate(180f + eoff)
-                          .add(width / 2f, height / 2f);
-
-                    Room espawn = new Room((int) Tmp.v1.x, (int) Tmp.v1.y,
-                                          rand.random(12, 20));
+                    Tmp.v1.set(cx - cxCenter, cy - cyCenter).rotate(180f + eoff).add(cxCenter, cyCenter);
+                    Room espawn = new Room((int) Tmp.v1.x, (int) Tmp.v1.y, rand.random(12, 20));
                     roomseq.add(espawn);
                     enemies.add(espawn);
                 }
@@ -218,17 +218,13 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
             }
         }
 
-        for (Room room : roomseq) {
-            erase(room.x, room.y, room.radius);
-        }
+        for (Room room : roomseq) erase(room.x, room.y, room.radius);
 
         for (Room room : roomseq) {
             if (room != spawn) spawn.connect(room);
         }
         int extras = rand.random(2, rooms + 2);
-        for (int i = 0; i < extras; i++) {
-            roomseq.random(rand).connect(roomseq.random(rand));
-        }
+        for (int i = 0; i < extras; i++) roomseq.random(rand).connect(roomseq.random(rand));
 
         Room fspawn = spawn;
 
@@ -244,10 +240,14 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
                     && noise(x + 400, y, 3, 0.4f, 13f, 1f) > 0.60f) {
                 block = VPBlocks.argentAndesiteWall;
             }
+
+            if (floor == VPBlocks.conductiveSand
+                    && noise(x + 800, y + 200, 3, 0.45f, 15f, 1f) > 0.62f) {
+                block = VPBlocks.conductiveSandWall;
+            }
         });
 
         pass((x, y) -> {
-
             if (Mathf.within(x, y, fspawn.x, fspawn.y, 18)) return;
 
             float fissure = Ridged.noise2d(seed, x * 0.018, y * 0.018, 3, 1.0);
@@ -260,26 +260,16 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
             }
 
             float lavaLake = noise(x + 200, y - 200, 3, 0.7f, 60f, 1f);
-            if (lavaLake > 0.85f) {
-                floor = Blocks.slag;
-                if (block.solid) block = Blocks.air;
-            }
+            if (lavaLake > 0.85f) { floor = Blocks.slag;               if (block.solid) block = Blocks.air; }
 
             float tarLake = noise(x - 300, y + 400, 3, 0.7f, 50f, 1f);
-            if (tarLake > 0.87f) {
-                floor = Blocks.tar;
-                if (block.solid) block = Blocks.air;
-            }
+            if (tarLake > 0.87f)  { floor = Blocks.tar;                if (block.solid) block = Blocks.air; }
 
             float toxicPool = noise(x + 500, y - 500, 3, 0.6f, 40f, 1f);
-            if (toxicPool > 0.80f) {
-                floor = VPBlocks.oxychlorideFloor;
-                if (block.solid) block = Blocks.air;
-            }
-            if (block == Blocks.air
-                && (floor == Blocks.ice || floor == Blocks.iceSnow || floor == Blocks.snow)) {
-                float snowDetail = noise(x - 100, y + 300, 3, 0.60f, 55f, 1f);
+            if (toxicPool > 0.80f) { floor = VPBlocks.oxychlorideFloor; if (block.solid) block = Blocks.air; }
 
+            if (block == Blocks.air && (floor == Blocks.ice || floor == Blocks.iceSnow || floor == Blocks.snow)) {
+                float snowDetail = noise(x - 100, y + 300, 3, 0.60f, 55f, 1f);
                 if      (snowDetail > 0.73f) floor = Blocks.water;
                 else if (snowDetail > 0.65f) floor = Blocks.moss;
                 else if (snowDetail > 0.57f) floor = Blocks.sporeMoss;
@@ -293,76 +283,39 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
         median(3, 0.6, Blocks.slag);
 
         FloatSeq oreFreqs = new FloatSeq();
-        for (int i = 0; i < 9; i++) {
-            oreFreqs.add(rand.random(-0.04f, 0.01f) - i * 0.008f);
-        }
+        for (int i = 0; i < 9; i++) oreFreqs.add(rand.random(-0.04f, 0.01f) - i * 0.008f);
 
         pass((x, y) -> {
-
             if (block != Blocks.air) {
                 if (!nearAir(x, y)) return;
-
-                if (floor == VPBlocks.voltaicMagma
-                        || floor == VPBlocks.pyroclasticAndesite) return;
-
+                if (floor == VPBlocks.voltaicMagma || floor == VPBlocks.pyroclasticAndesite) return;
                 float wallOre = noise(x + 100, y + 100, 3, 0.5f, 22f, 1f);
                 float dst = Mathf.dst(x, y, fspawn.x, fspawn.y) / (width / 2f);
-
-                if      (wallOre > 0.84f && dst > 0.40f && countWalls(x, y) > 2)
-                    ore = Blocks.wallOreTungsten;
-                else if (wallOre > 0.80f && countWalls(x, y) > 2)
-                    ore = Blocks.wallOreBeryllium;
-                else if (wallOre > 0.73f)
-                    block = Blocks.graphiticWall;
+                if      (wallOre > 0.84f && dst > 0.40f && countWalls(x, y) > 2) ore = Blocks.wallOreTungsten;
+                else if (wallOre > 0.80f && countWalls(x, y) > 2)                ore = Blocks.wallOreBeryllium;
+                else if (wallOre > 0.73f)                                         block = Blocks.graphiticWall;
                 return;
             }
 
             if (floor.asFloor().isLiquid) return;
-            if (floor == VPBlocks.voltaicMagma
-                    || floor == VPBlocks.pyroclasticAndesite) return;
+            if (floor == VPBlocks.voltaicMagma || floor == VPBlocks.pyroclasticAndesite) return;
             if (nearWall(x, y)) return;
 
             float dst = Mathf.dst(x, y, fspawn.x, fspawn.y) / (width / 2f);
             int ox = x - 4, oy = y + 23;
 
             if (dst < 0.35f) {
-                if (Math.abs(0.5f - noise(ox, oy,        2, 0.7f, 40f, 1f)) > 0.24f &&
-                    Math.abs(0.5f - noise(ox, oy,        1,    1, 30f, 1f)) > 0.41f + oreFreqs.get(0))
-                    { ore = Blocks.oreCopper;   return; }
-
-                if (Math.abs(0.5f - noise(ox, oy + 999,  2, 0.7f, 42f, 1f)) > 0.25f &&
-                    Math.abs(0.5f - noise(ox, oy - 999,  1,    1, 32f, 1f)) > 0.42f + oreFreqs.get(1))
-                    { ore = Blocks.oreLead;     return; }
-
-                if (Math.abs(0.5f - noise(ox, oy + 1998, 2, 0.7f, 44f, 1f)) > 0.26f &&
-                    Math.abs(0.5f - noise(ox, oy - 1998, 1,    1, 34f, 1f)) > 0.43f + oreFreqs.get(2))
-                    { ore = Blocks.oreCoal;     return; }
-            }
-            else if (dst < 0.75f) {
-                if (Math.abs(0.5f - noise(ox, oy + 2997, 2, 0.7f, 40f, 1f)) > 0.24f &&
-                    Math.abs(0.5f - noise(ox, oy - 2997, 1,    1, 30f, 1f)) > 0.41f + oreFreqs.get(3))
-                    { ore = Blocks.oreTitanium; return; }
-
-                if (Math.abs(0.5f - noise(ox, oy + 3996, 2, 0.7f, 42f, 1f)) > 0.25f &&
-                    Math.abs(0.5f - noise(ox, oy - 3996, 1,    1, 32f, 1f)) > 0.42f + oreFreqs.get(4))
-                    { ore = Blocks.oreBeryllium; return; }
-
-                if (Math.abs(0.5f - noise(ox, oy + 4995, 2, 0.7f, 44f, 1f)) > 0.26f &&
-                    Math.abs(0.5f - noise(ox, oy - 4995, 1,    1, 34f, 1f)) > 0.43f + oreFreqs.get(5))
-                    { ore = VPBlocks.silverOre; return; }
-            }
-            else {
-                if (Math.abs(0.5f - noise(ox, oy + 5994, 2, 0.7f, 40f, 1f)) > 0.24f &&
-                    Math.abs(0.5f - noise(ox, oy - 5994, 1,    1, 30f, 1f)) > 0.41f + oreFreqs.get(6))
-                    { ore = Blocks.oreThorium;  return; }
-
-                if (Math.abs(0.5f - noise(ox, oy + 6993, 2, 0.7f, 42f, 1f)) > 0.25f &&
-                    Math.abs(0.5f - noise(ox, oy - 6993, 1,    1, 32f, 1f)) > 0.42f + oreFreqs.get(7))
-                    { ore = Blocks.oreTungsten; return; }
-
-                if (Math.abs(0.5f - noise(ox, oy + 7992, 2, 0.7f, 44f, 1f)) > 0.26f &&
-                    Math.abs(0.5f - noise(ox, oy - 7992, 1,    1, 34f, 1f)) > 0.43f + oreFreqs.get(8))
-                    { ore = VPBlocks.palladiumOre; return; }
+                if (Math.abs(0.5f - noise(ox, oy,        2, 0.7f, 40f, 1f)) > 0.24f && Math.abs(0.5f - noise(ox, oy,        1, 1, 30f, 1f)) > 0.41f + oreFreqs.get(0)) { ore = Blocks.oreCopper;    return; }
+                if (Math.abs(0.5f - noise(ox, oy + 999,  2, 0.7f, 42f, 1f)) > 0.25f && Math.abs(0.5f - noise(ox, oy - 999,  1, 1, 32f, 1f)) > 0.42f + oreFreqs.get(1)) { ore = Blocks.oreLead;      return; }
+                if (Math.abs(0.5f - noise(ox, oy + 1998, 2, 0.7f, 44f, 1f)) > 0.26f && Math.abs(0.5f - noise(ox, oy - 1998, 1, 1, 34f, 1f)) > 0.43f + oreFreqs.get(2)) { ore = Blocks.oreCoal;      return; }
+            } else if (dst < 0.75f) {
+                if (Math.abs(0.5f - noise(ox, oy + 2997, 2, 0.7f, 40f, 1f)) > 0.24f && Math.abs(0.5f - noise(ox, oy - 2997, 1, 1, 30f, 1f)) > 0.41f + oreFreqs.get(3)) { ore = Blocks.oreTitanium;  return; }
+                if (Math.abs(0.5f - noise(ox, oy + 3996, 2, 0.7f, 42f, 1f)) > 0.25f && Math.abs(0.5f - noise(ox, oy - 3996, 1, 1, 32f, 1f)) > 0.42f + oreFreqs.get(4)) { ore = Blocks.oreBeryllium; return; }
+                if (Math.abs(0.5f - noise(ox, oy + 4995, 2, 0.7f, 44f, 1f)) > 0.26f && Math.abs(0.5f - noise(ox, oy - 4995, 1, 1, 34f, 1f)) > 0.43f + oreFreqs.get(5)) { ore = VPBlocks.silverOre;  return; }
+            } else {
+                if (Math.abs(0.5f - noise(ox, oy + 5994, 2, 0.7f, 40f, 1f)) > 0.24f && Math.abs(0.5f - noise(ox, oy - 5994, 1, 1, 30f, 1f)) > 0.41f + oreFreqs.get(6)) { ore = Blocks.oreThorium;   return; }
+                if (Math.abs(0.5f - noise(ox, oy + 6993, 2, 0.7f, 42f, 1f)) > 0.25f && Math.abs(0.5f - noise(ox, oy - 6993, 1, 1, 32f, 1f)) > 0.42f + oreFreqs.get(7)) { ore = Blocks.oreTungsten;  return; }
+                if (Math.abs(0.5f - noise(ox, oy + 7992, 2, 0.7f, 44f, 1f)) > 0.26f && Math.abs(0.5f - noise(ox, oy - 7992, 1, 1, 34f, 1f)) > 0.43f + oreFreqs.get(8)) { ore = VPBlocks.palladiumOre; return; }
             }
         });
 
@@ -376,31 +329,6 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
         median(2);
         inverseFloodFill(tiles.getn(fspawn.x, fspawn.y));
 
-int borderDepth = 8;
-        pass((x, y) -> {
-            int edgeDist = Math.min(Math.min(x, y), Math.min(width - 1 - x, height - 1 - y));
-            if (edgeDist >= borderDepth) return;
-
-            float organicThresh = 1f + noise(x, y, 2, 0.5f, 20f, 1f) * (borderDepth - 1f);
-            if (edgeDist < (int) organicThresh) {
-                if (floor == VPBlocks.darkAndesite || floor == VPBlocks.pyroclasticAndesite
-                        || floor.asFloor().isLiquid) {
-                    floor = VPBlocks.darkAndesite;
-                    block = VPBlocks.darkAndesiteWall;
-                } else if (floor == VPBlocks.argentAndesite) {
-                    block = VPBlocks.argentAndesiteWall;
-                } else if (floor == VPBlocks.conductiveSand) {
-                    block = VPBlocks.conductiveSandWall;
-                } else if (floor == Blocks.snow || floor == Blocks.ice) {
-                    block = Blocks.iceWall;
-                } else {
-                    floor = VPBlocks.darkAndesite;
-                    block = VPBlocks.darkAndesiteWall;
-                }
-                ore = Blocks.air;
-            }
-        });
-
         erase(fspawn.x, fspawn.y, 20);
         Schematics.placeLaunchLoadout(fspawn.x, fspawn.y);
 
@@ -412,14 +340,13 @@ int borderDepth = 8;
 
         if (sector.hasEnemyBase()) {
             if (enemyTiles.any()) {
-                basegen.generate(
-                    tiles, enemyTiles, tiles.get(fspawn.x, fspawn.y),
-                    Team.crux, sector, sector.threat
-                );
+                basegen.generate(tiles, enemyTiles, tiles.get(fspawn.x, fspawn.y),
+                                 Team.crux, sector, sector.threat);
             }
             state.rules.attackMode = true;
         } else {
             for (Room r : enemies) {
+                erase(r.x, r.y, 6);
                 Tile t = tiles.getn(r.x, r.y);
                 if (t != null) t.setOverlay(Blocks.spawn);
             }
@@ -427,8 +354,7 @@ int borderDepth = 8;
         }
 
         state.rules.waves       = true;
-        state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2f, 60f * 60f,
-                                             Mathf.clamp(sector.threat));
+        state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2f, 60f * 60f, Mathf.clamp(sector.threat));
         state.rules.env         = sector.planet.defaultEnv;
     }
 
