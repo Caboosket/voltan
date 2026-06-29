@@ -25,24 +25,24 @@ public class VPPlanets {
             cloudMeshLoader = () -> new MultiMesh(
 
                 new HexSkyMesh(this, 2, 0.15f, 0.13f, 5,
-                    Color.valueOf("1a0510").a(0.55f), 2, 0.50f, 1.00f, 0.30f),
+                    Color.valueOf("1a0510").a(0.40f), 2, 0.50f, 1.00f, 0.30f),
 
                 new HexSkyMesh(this, 5, 0.50f, 0.15f, 5,
-                    Color.valueOf("d6147a").a(0.38f), 2, 0.45f, 1.09f, 0.42f),
+                    Color.valueOf("c01068").a(0.52f), 2, 0.45f, 1.09f, 0.42f),
 
-                new HexSkyMesh(this, 8, 0.30f, 0.13f, 5,
-                    Color.valueOf("ff6fb0").a(0.20f), 2, 0.40f, 1.18f, 0.56f),
-
-                new VoltaRingMesh(this, 2.35f, 0.05f, 0.70f, 10, 18f, 0.18f,
+                new VoltaRingMesh(this, 2.65f, 0.05f, 0.70f, 10, 18f, 0.18f,
                     Color.valueOf("8a2266").a(0.85f), Color.valueOf("4a1042").a(0.80f)),
 
-                new VoltaRingMesh(this, 2.55f, 0.045f, 0.92f, 4, 18f, 0.18f,
-                    Color.valueOf("5a1a8a").a(0.40f), Color.valueOf("7a2ba0").a(0.40f))
+                new VoltaRingMesh(this, 2.88f, 0.045f, 0.92f, 4, 18f, 0.18f,
+                    Color.valueOf("5a1a8a").a(0.40f), Color.valueOf("7a2ba0").a(0.40f)),
+
+                new VoltaRingMesh(this, 2.76f, 0.035f, 0.96f, 28, 18f, 0.28f,
+                    Color.valueOf("0a0820").a(0.30f), Color.valueOf("4466ff").a(0.28f))
             );
 
-            atmosphereColor   = Color.valueOf("d6147a").a(0.62f);
-            atmosphereRadIn   = 1.02f;
-            atmosphereRadOut  = 1.30f;
+            atmosphereColor  = Color.valueOf("d6147a").a(0.45f);
+            atmosphereRadIn  = 1.06f;
+            atmosphereRadOut = 1.22f;
 
             bloom = false;
 
