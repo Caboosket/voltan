@@ -7,6 +7,7 @@ import voltaprotocol.content.VPLiquids;
 import voltaprotocol.content.VPBlocks;
 import voltaprotocol.content.VPItems;
 import voltaprotocol.content.VPTechTree;
+import voltaprotocol.content.VPUnits;
 import voltaprotocol.content.VPPlanets;
 import voltaprotocol.content.VPSectors;
 
@@ -20,6 +21,7 @@ public class VoltaProtocol extends Mod {
         VPLiquids.load();
         VPBlocks.load();
         VPPlanets.load();
+        VPUnits.load();
         VPSectors.load();
         VPTechTree.load();
 
