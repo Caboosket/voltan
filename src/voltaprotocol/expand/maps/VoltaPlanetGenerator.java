@@ -40,61 +40,83 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
     public static final Color rosaApagado       = Color.valueOf("8a5468");
     public static Interp interp = new Interp.Exp(2, 3);
 
+    float heightYOffset = 31.7f;
+    float scl           = 4.8f;
+    float floorOffset   = 0.05f;
+    float heightScl     = 1.00f;
+
     @Override
     public float getHeight(Vec3 position) {
-        float noise      = Simplex.noise3d(seed, 3, 0.5f, 0.3f, position.x, position.y, position.z);
+
+        float raw    = Simplex.noise3d(seed, 6, 0.5f, 1f / 3f,
+                           position.x * scl,
+                           position.y * scl + heightYOffset,
+                           position.z * scl) * heightScl;
+
+        float height = (Mathf.pow(raw, 2.0f) + floorOffset) / (1f + floorOffset);
+
         float latitude   = Math.abs(position.y);
-        float poleFactor = (float) Math.pow(latitude, 8);
-        return Mathf.clamp(noise * 0.72f + poleFactor * 0.18f, 0.05f, 0.95f);
+
+        float poleFactor = (float) Math.pow(latitude, 10) * 0.07f;
+
+        float combined = Mathf.clamp(height + poleFactor, 0f, 1f);
+
+        return 0.10f + combined * 0.52f;
     }
 
-    public Color getColor(Vec3 position) {
+    @Override
+    public void getColor(Vec3 position, Color out) {
         float depth   = getHeight(position);
-        float patch   = Simplex.noise3d(seed + 50,  3, 0.4f, 0.5f, position.x * 2, position.y * 2, position.z * 2);
-        float detailA = Simplex.noise3d(seed + 80,  2, 0.5f, 0.8f, position.x * 3, position.y * 3, position.z * 3);
-        float detailB = Simplex.noise3d(seed + 130, 2, 0.6f, 0.6f, position.x * 4, position.y * 4 + 1f, position.z * 4);
+        float patch   = Simplex.noise3d(seed + 50,  3, 0.4f, 0.5f,  position.x * 2, position.y * 2, position.z * 2);
+        float detailA = Simplex.noise3d(seed + 80,  2, 0.5f, 0.8f,  position.x * 3, position.y * 3, position.z * 3);
+        float detailB = Simplex.noise3d(seed + 130, 2, 0.6f, 0.6f,  position.x * 4, position.y * 4 + 1f, position.z * 4);
         float micro   = Simplex.noise3d(seed + 220, 2, 0.55f, 1.2f, position.x * 6, position.y * 6, position.z * 6);
+        float darkVar = Simplex.noise3d(seed + 400, 2, 0.45f, 0.7f, position.x * 2.5f, position.y * 2.5f, position.z * 2.5f);
 
         float latitude    = Math.abs(position.y);
         float poleEdge    = Simplex.noise3d(seed + 300, 2, 0.5f, 1.5f, position.x * 3, position.y * 3, position.z * 3) * 0.04f;
         boolean isPoleCap = latitude > (0.92f - poleEdge);
 
-        Color base;
         Color blend    = null;
         float blendAmt = 0f;
 
         if (isPoleCap) {
-            base     = nieveCumbre;
+            out.set(nieveCumbre);
             blend    = plataConductiva;
             blendAmt = Mathf.clamp((latitude - 0.92f) / 0.08f) * 0.25f;
-        } else if (depth > 0.82f && patch > 0.35f) {
-            base = Tmp.c2.set(nieveCumbre).lerp(plataConductiva, 0.55f);
-        } else if (depth < 0.45f && detailB > 0.74f) {
-            base     = oxicloruroColor;
+
+        } else if (depth > 0.59f && patch > 0.45f) {
+            out.set(nieveCumbre).lerp(plataConductiva, 0.60f);
+        } else if (depth < 0.33f && detailB > 0.74f) {
+            out.set(oxicloruroColor);
             blend    = violetaProfundo;
             blendAmt = Mathf.clamp((detailB - 0.74f) / 0.18f) * 0.35f;
-        } else if (depth > 0.30f && depth < 0.60f && detailA > 0.62f && patch < 0.35f) {
-            base     = musgoSerpulo;
+        } else if (depth > 0.25f && depth < 0.41f && detailA > 0.62f && patch < 0.35f) {
+            out.set(musgoSerpulo);
             blend    = rosaApagado;
             blendAmt = Mathf.clamp((detailA - 0.62f) / 0.28f) * 0.30f;
-        } else if (depth < 0.38f && patch > 0.52f && detailA < 0.40f) {
-            base = arenaOscuraColor;
+        } else if (depth < 0.30f && patch > 0.52f && detailA < 0.40f) {
+            out.set(arenaOscuraColor);
         } else if (patch > 0.45f) {
-            base     = plataConductiva;
+            out.set(plataConductiva);
             blend    = rosaApagado;
             blendAmt = Mathf.clamp((patch - 0.45f) / 0.30f) * 0.25f;
         } else if (patch > 0.15f) {
-            base     = miasmaConcentrado;
+            out.set(miasmaConcentrado);
             blend    = violetaProfundo;
             blendAmt = Mathf.clamp((0.45f - patch) / 0.30f) * 0.20f;
         } else {
-            base = andesitaOscura;
+            out.set(andesitaOscura);
         }
 
-        Color result = new Color(base);
-        if (blend != null) result.lerp(blend, blendAmt);
-        result.lerp(detailB > 0f ? plataConductiva : violetaProfundo, Math.abs(micro) * 0.08f);
-        return Tmp.c1.set(result).mul(Mathf.clamp(0.30f + depth * 0.50f, 0.30f, 0.80f));
+        if (blend != null) out.lerp(blend, blendAmt);
+        out.lerp(detailB > 0f ? plataConductiva : violetaProfundo, Math.abs(micro) * 0.08f);
+        if (darkVar < 0.35f && depth > 0.27f && depth < 0.52f) {
+            out.lerp(andesitaOscura, Mathf.clamp((0.35f - darkVar) / 0.35f) * 0.30f);
+        }
+
+        float brightness = Mathf.clamp(0.20f + depth * 0.84f, 0.28f, 0.72f);
+        out.mul(brightness, brightness, brightness, 1f);
     }
 
     @Override
@@ -103,13 +125,13 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
         float patch  = Simplex.noise3d(seed + 50,  3, 0.4f, 0.5f, position.x * 2, position.y * 2, position.z * 2);
         float iceVar = Simplex.noise3d(seed + 110, 2, 0.6f, 0.6f, position.x * 5, position.y * 5, position.z * 5);
 
-        if (h > 0.85f) {
+        if (h > 0.57f) {
             tile.floor = iceVar > 0.50f ? Blocks.ice : iceVar > 0.15f ? Blocks.iceSnow : Blocks.snow;
-        } else if (h > 0.70f) {
+        } else if (h > 0.51f) {
             tile.floor = iceVar > 0.55f ? Blocks.ice : iceVar > 0.28f ? Blocks.iceSnow : Blocks.snow;
         } else if (patch > 0.60f) {
             tile.floor = VPBlocks.conductiveSand.asFloor();
-        } else if (h > 0.45f) {
+        } else if (h > 0.33f) {
             tile.floor = VPBlocks.argentAndesite.asFloor();
         } else {
             tile.floor = VPBlocks.darkAndesite.asFloor();
@@ -240,7 +262,6 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
                     && noise(x + 400, y, 3, 0.4f, 13f, 1f) > 0.60f) {
                 block = VPBlocks.argentAndesiteWall;
             }
-
             if (floor == VPBlocks.conductiveSand
                     && noise(x + 800, y + 200, 3, 0.45f, 15f, 1f) > 0.62f) {
                 block = VPBlocks.conductiveSandWall;
@@ -260,10 +281,10 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
             }
 
             float lavaLake = noise(x + 200, y - 200, 3, 0.7f, 60f, 1f);
-            if (lavaLake > 0.85f) { floor = Blocks.slag;               if (block.solid) block = Blocks.air; }
+            if (lavaLake > 0.85f) { floor = Blocks.slag;                if (block.solid) block = Blocks.air; }
 
             float tarLake = noise(x - 300, y + 400, 3, 0.7f, 50f, 1f);
-            if (tarLake > 0.87f)  { floor = Blocks.tar;                if (block.solid) block = Blocks.air; }
+            if (tarLake > 0.87f)  { floor = Blocks.tar;                 if (block.solid) block = Blocks.air; }
 
             float toxicPool = noise(x + 500, y - 500, 3, 0.6f, 40f, 1f);
             if (toxicPool > 0.80f) { floor = VPBlocks.oxychlorideFloor; if (block.solid) block = Blocks.air; }
@@ -289,11 +310,12 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
             if (block != Blocks.air) {
                 if (!nearAir(x, y)) return;
                 if (floor == VPBlocks.voltaicMagma || floor == VPBlocks.pyroclasticAndesite) return;
+                if (nearHeatFloor(x, y)) return;
                 float wallOre = noise(x + 100, y + 100, 3, 0.5f, 22f, 1f);
                 float dst = Mathf.dst(x, y, fspawn.x, fspawn.y) / (width / 2f);
                 if      (wallOre > 0.84f && dst > 0.40f && countWalls(x, y) > 2) ore = Blocks.wallOreTungsten;
                 else if (wallOre > 0.80f && countWalls(x, y) > 2)                ore = Blocks.wallOreBeryllium;
-                else if (wallOre > 0.73f)                                         block = Blocks.graphiticWall;
+                else if (wallOre > 0.73f)                                        block = Blocks.graphiticWall;
                 return;
             }
 
@@ -341,7 +363,7 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
         if (sector.hasEnemyBase()) {
             if (enemyTiles.any()) {
                 basegen.generate(tiles, enemyTiles, tiles.get(fspawn.x, fspawn.y),
-                                 Team.crux, sector, sector.threat);
+                Team.crux, sector, sector.threat);
             }
             state.rules.attackMode = true;
         } else {
@@ -367,5 +389,18 @@ public class VoltaPlanetGenerator extends PlanetGenerator {
             }
         }
         return total;
+    }
+
+    private boolean nearHeatFloor(int x, int y) {
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dy = -2; dy <= 2; dy++) {
+                Tile t = tiles.get(x + dx, y + dy);
+                if (t != null && (t.floor() == VPBlocks.voltaicMagma
+                                || t.floor() == VPBlocks.pyroclasticAndesite)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
