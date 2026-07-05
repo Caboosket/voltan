@@ -5,17 +5,71 @@ health: 850
 range: 140
 liquidCapacity: 40
 liquidConsumed: 0.15
+outlineRadius: 2
+
+drawer: {
+  type: DrawMulti
+  drawers: [
+    {
+      type: DrawTurret
+      basePrefix: ""
+      parts: [
+        {
+          type: RegionPart
+          suffix: "-liquid"
+          mirror: false
+          under: true
+        }
+        {
+          type: RegionPart
+          suffix: "-nozzle-r"
+          mirror: false
+
+          x: 0.5
+          y: 1
+
+          progress: warmup
+          moveX: 1.5
+          moveY: -0.5
+          moveRot: 6.0
+
+          heatProgress: heat
+        }
+        {
+          type: RegionPart
+          suffix: "-nozzle-l"
+          mirror: false
+
+          x: -0.5
+          y: 1
+
+          progress: warmup
+          moveX: -1.5
+          moveY: -0.5
+          moveRot: -3.0
+
+          heatProgress: heat
+        }
+      ]
+    }
+    {
+      type: DrawHeatRegion
+    }
+  ]
+}
 
 category: turret
 loopSound: shootSublimate
 
+shootX: 0
+shootY: 5.5
 
 ammoTypes: {
   vx-1-oxychloride: {
     type: ContinuousFlameBulletType
     damage: 35
     length: 145
-    width: 5
+    width: 3
     pierceCap: 2
     rangeChange: +30
 
@@ -46,7 +100,7 @@ ammoTypes: {
     type: ContinuousFlameBulletType 
     damage: 23
     length: 130
-    width: 4
+    width: 3
     pierceCap: 2
 
     colors: [451a00, 8c3000, d96c00, ffa64d, fff6e0]
@@ -115,4 +169,9 @@ requirements: [
 research: {
   parent: t1-tipe-1
   objectives: [vx-1-oxychloride]
+requirements: [
+  vw-1-silver/500
+  lead/800
+  metaglass/450
+  ]
 }
