@@ -122,7 +122,7 @@ public class VPBlocks {
             localizedName = "Geiser voltaico";
             variants = 0;
             attributes.set(Attribute.steam, 2.0f);
-            parent = darkAndesite;
+            parent = blendGroup = darkAndesite;
             oreDefault = false;
         }};
 
