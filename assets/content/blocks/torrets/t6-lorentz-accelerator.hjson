@@ -1,0 +1,204 @@
+type: ItemTurret
+name: Acelerador de Plasma Lorentz
+description: Utiliza potentes campos electromagnéticos para acelerar plasma a velocidades extremas. Dispara un rayo concentrado que perfora defensas y estalla en chispas volátiles al impactar. Diseñado para abatir objetivos de alto blindaje.
+
+size: 4
+health: 3200
+range: 650
+
+reload: 300
+recoil: 6
+shake: 8
+
+shootSound: shootSmite
+shootSoundVolume: 1.0
+
+unitSort: strongest
+
+hasLiquids: true
+liquidCapacity: 80
+coolantMultiplier: 0.5
+
+maxAmmo: 30
+ammoPerShot: 3
+
+consumes: {
+  power: 30
+  coolant: {
+    liquid: cryofluid
+    amount: 1.0
+  }
+}
+
+drawer: {
+  type: DrawTurret
+  basePrefix: reinforced-
+  parts: [
+    {
+      type: RegionPart
+      suffix: -barrel
+      progress: recoil
+      moveY: -4
+      under: false
+    }
+    {
+      type: RegionPart
+      suffix: -glow
+      blending: additive
+      progress: charge
+      color: ffffff00
+      colorTo: ff9a3cff
+      outline: false
+      under: false
+    }
+    {
+      type: RegionPart
+      suffix: -side
+      progress: warmup
+      mirror: true
+      moveX: 2.5
+      moveY: -1
+      moveRot: -15
+      under: true
+    }
+  ]
+}
+
+ammoTypes: {
+vw-5-voltium: {
+    type: PointBulletType
+
+    speed: 200
+    lifetime: 3
+
+    damage: 2800
+    pierce: true
+    pierceBuilding: true
+    pierceDamageFactor: 0.5
+    buildingDamageMultiplier: 0.03
+    hitColor: ff9a3c
+    ammoMultiplier: 1
+
+    shootEffect: {
+      type: MultiEffect
+      effects: [
+        {
+          type: WaveEffect
+          colorFrom: ffffff
+          colorTo: ff9a3c
+          sizeFrom: 0
+          sizeTo: 50
+          lifetime: 25
+          strokeFrom: 5
+          strokeTo: 0
+        }
+        {
+          type: ParticleEffect
+          colorFrom: ffffff
+          colorTo: ff9a3c
+          particles: 25
+          length: 80
+          lifetime: 45
+          sizeFrom: 7
+          sizeTo: 0
+          interp: pow5Out
+        }
+      ]
+    }
+    
+    trailEffect: {
+      type: ParticleEffect
+      colorFrom: ffffff
+      colorTo: ff9a3c
+      particles: 5
+      length: 25
+      baseLength: 10
+      lifetime: 35
+      sizeFrom: 5
+      sizeTo: 0
+    }
+    trailSpacing: 10
+
+    hitEffect: {
+      type: MultiEffect
+      effects: [
+        {
+          type: WaveEffect
+          colorFrom: ffffff
+          colorTo: ff9a3c
+          sizeFrom: 0
+          sizeTo: 70
+          lifetime: 30
+          strokeFrom: 6
+          strokeTo: 0
+        }
+        {
+          type: ParticleEffect
+          colorFrom: ff9a3c
+          colorTo: d66914
+          particles: 40
+          length: 90
+          lifetime: 60
+          sizeFrom: 8
+          sizeTo: 0
+          interp: exp10Out
+        }
+      ]
+    }
+    despawnEffect: none
+    hitSound: explosionTitan
+    smokeEffect: smokeCloud
+
+    lightning: 6
+    buildingDamageMultiplier: 0.15
+    lightningLength: 20
+    lightningDamage: 80
+    lightningColor: ff9a3c
+
+    fragBullets: 15
+    fragRandomSpread: 360
+    fragVelocityMin: 0.4
+    fragVelocityMax: 1.2
+
+    fragBullet: {
+      type: BasicBulletType
+      damage: 40
+      speed: 3
+      lifetime: 18
+      drag: 0.05
+      width: 4
+      height: 4
+      buildingDamageMultiplier: 0.2
+      
+      frontColor: ffffff
+      backColor: ff9a3c
+      trailColor: ff9a3c
+      trailWidth: 1.5
+      trailLength: 6
+      
+      hitEffect: hitBulletColor
+      despawnEffect: hitBulletColor
+    }
+  }
+}
+
+requirements: [
+  vw-1-silver/500
+  vw-2-palladium/350
+  vw-3-aegesium/200
+  vw-5-voltium/150
+]
+
+research: {
+  researchCostMultiplier: 0.3
+  parent: t5-gorgon
+  objectives: [ vw-5-voltium ]
+  requirements: [
+    vw-1-silver/2000
+    vw-2-palladium/1500
+    titanium/2500
+    silicon/2400
+  ]
+}
+
+category: turret
