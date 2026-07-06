@@ -1,6 +1,4 @@
 type: ItemTurret
-name: Acelerador de Plasma Lorentz
-description: Utiliza potentes campos electromagnéticos para acelerar plasma a velocidades extremas. Dispara un rayo concentrado que perfora defensas y estalla en chispas volátiles al impactar. Diseñado para abatir objetivos de alto blindaje.
 
 size: 4
 health: 3200
