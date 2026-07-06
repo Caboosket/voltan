@@ -24,6 +24,7 @@ rotateSpeed: 6.5
 
 hasLiquids: true
 liquidCapacity: 40
+coolantMultiplier: 1.4
 
 consumes: {
   coolant: {
@@ -98,7 +99,7 @@ ammoTypes: {
     pierceCap: 3
     buildingDamageMultiplier: 0.4
     ammoMultiplier: 2
-    reloadMultiplier: 0.8
+    reloadMultiplier: 0.85
     rangeChange: 20
     frontColor: d1dce6
     backColor: 768a96
@@ -114,6 +115,7 @@ ammoTypes: {
     splashDamage: 45
     splashDamageRadius: 35
     buildingDamageMultiplier: 0.2
+    reloadMultiplier: 1.15
     ammoMultiplier: 3
     status: melting
     statusDuration: 150
@@ -125,7 +127,7 @@ ammoTypes: {
     type: BasicBulletType
     speed: 7.5
     damage: 55
-    reloadMultiplier: 0.85
+    reloadMultiplier: 0.9
     rangeChange: 15
     width: 11
     height: 16
@@ -143,7 +145,7 @@ ammoTypes: {
     type: BasicBulletType
     speed: 9.5
     damage: 50
-    reloadMultiplier: 1.0
+    reloadMultiplier: 1.1
     rangeChange: 25
     width: 10
     height: 18
