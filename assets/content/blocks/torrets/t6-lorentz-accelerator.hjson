@@ -150,7 +150,6 @@ vw-5-voltium: {
     smokeEffect: smokeCloud
 
     lightning: 6
-    buildingDamageMultiplier: 0.15
     lightningLength: 20
     lightningDamage: 80
     lightningColor: ff9a3c
