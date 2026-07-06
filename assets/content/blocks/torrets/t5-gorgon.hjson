@@ -10,6 +10,7 @@ shootSound: shootRipple
 
 hasLiquids: true
 liquidCapacity: 80
+coolantMultiplier: 3
 
 consumes: {
   coolant: {
