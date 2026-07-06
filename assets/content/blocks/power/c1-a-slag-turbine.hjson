@@ -38,8 +38,7 @@ drawer: {
   type: DrawMulti
   drawers: [
     {
-      type: DrawRegion
-      suffix: -bottom
+      type: DrawDefault
     }
     {
       type: DrawLiquidRegion
@@ -57,9 +56,6 @@ drawer: {
       suffix: -slag
       drawLiquid: slag
       alpha: 0.7
-    }
-    {
-      type: DrawDefault
     }
     {
       type: DrawRegion
