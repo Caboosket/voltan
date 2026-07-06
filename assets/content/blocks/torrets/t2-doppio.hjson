@@ -78,6 +78,7 @@ shoot: {
   shots: 2
   shotDelay: 4
   barrels: 2
+  spread: 7
 }
 
 shootX: 0
