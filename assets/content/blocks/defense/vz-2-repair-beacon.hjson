@@ -1,15 +1,25 @@
 type: MendProjector
-name: Repair Beacon
 
 health: 250
 size: 2
 
-healPercent: 0.12
-reload: 175
+healPercent: 11.5
+reload: 210
 range: 80
 
+phaseBoost: 15
+phaseRangeBoost: 20
+scaledHealth: 80
+
 consumes: {
-  power: 0.30
+  power: 1
+  items: {
+    items: [
+      phase-fabric/1 
+    ]
+    booster: true
+    optional: true
+  }
 }
 
 requirements: [
