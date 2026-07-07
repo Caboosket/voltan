@@ -1,0 +1,25 @@
+type: Duct
+name: Conducto de Paladio
+
+health: 140
+size: 1
+speed: 4
+armored: true
+
+requirements: [
+  vw-2-palladium/2
+  vw-1-silver/1
+  copper/1
+]
+
+category: distribution
+
+research: {
+  parent: s-1-silver-conveyor
+  objectives: [ vw-2-palladium ]
+  requirements: [
+    vw-2-palladium/300
+    vw-1-silver/400
+    lead/100
+  ]
+}
