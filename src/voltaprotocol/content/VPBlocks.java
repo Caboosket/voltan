@@ -14,6 +14,8 @@ import mindustry.world.blocks.environment.SteamVent;
 import mindustry.world.meta.BuildVisibility;
 import voltaprotocol.world.blocks.defense.RegenerativeWall;
 import mindustry.world.meta.Attribute;
+import voltaprotocol.world.blocks.units.LiquidCargoLoader;
+import voltaprotocol.world.blocks.units.LiquidCargoUnloadPoint;
 
 public class VPBlocks {
 //environment
@@ -43,6 +45,9 @@ public class VPBlocks {
     public static Wall palladiumWallLarge;
     public static RegenerativeWall regenerativeWall;
     public static RegenerativeWall regenerativeWallLarge;
+    //Distribution
+    public static Block liquidCargoLoader;
+    public static Block liquidCargoUnloadPoint;
 
     public static void load(){
         Log.info("[Volta Protocol] Cargando bloques y configurando ingeniería defensiva...");
@@ -121,7 +126,7 @@ public class VPBlocks {
         voltaicGeyser = new SteamVent("env-voltaic-geyser"){{
             localizedName = "Geiser voltaico";
             variants = 0;
-            attributes.set(Attribute.steam, 2.0f);
+            attributes.set(Attribute.steam, 1.5f);
             parent = blendGroup = darkAndesite;
             oreDefault = false;
         }};
@@ -145,7 +150,6 @@ public class VPBlocks {
         }};
         
         silverWall = new Wall("a0-silver-wall"){{
-            localizedName = "Muro de Plata";
             health = 460;
             armor = 2f;
             chanceDeflect = 0.08f;
@@ -156,7 +160,6 @@ public class VPBlocks {
         }};
 
         silverWallLarge = new Wall("a1-silver-wall-large"){{
-            localizedName = "Gran Muro de Plata";
             health = 1900;
             armor = 2f;
             chanceDeflect = 0.14f;
@@ -167,7 +170,6 @@ public class VPBlocks {
         }};
         
         palladiumWall = new Wall("a2-palladium-wall"){{
-            localizedName = "Muro de Paladio";
             health = 600;
             armor = 3f;
             insulated = true;
@@ -183,7 +185,6 @@ public class VPBlocks {
         }};
 
         palladiumWallLarge = new Wall("a3-palladium-wall-large"){{
-            localizedName = "Gran Muro de Paladio";
             health = 2400;
             armor = 3f;
             insulated = true;
@@ -199,17 +200,41 @@ public class VPBlocks {
         }};
         
         regenerativeWall = new RegenerativeWall("a4-regenerative-wall", 1, 950, 3f, 2f, 10f){{
-            localizedName = "Muro Bio-Regenerativo";
             category = Category.defense;
             buildVisibility = BuildVisibility.shown;
             requirements(Category.defense, ItemStack.with(VPItems.bioComposite, 6, VPItems.palladium, 1));
         }};
 
         regenerativeWallLarge = new RegenerativeWall("a5-regenerative-wall-large", 2, 3800, 4f, 4f, 25f){{
-            localizedName = "Gran Muro Bio-Regenerativo";
             category = Category.defense;
             buildVisibility = BuildVisibility.shown;
             requirements(Category.defense, ItemStack.with(VPItems.bioComposite, 24, VPItems.palladium, 4));
+        }};
+
+        liquidCargoLoader = new LiquidCargoLoader("liquid-cargo-loader"){{
+            size = 3;
+            category = Category.liquid;
+            buildVisibility = BuildVisibility.shown;
+            
+            unitType = VPUnits.sifon;
+            unitBuildTime = 60f * 10f;
+            liquidCapacity = 400f;
+            
+            consumePower(2.5f); 
+            
+            requirements(Category.liquid, ItemStack.with(VPItems.silver, 120, VPItems.palladium, 80));
+        }};
+
+        liquidCargoUnloadPoint = new LiquidCargoUnloadPoint("liquid-cargo-unload-point"){{
+            size = 2;
+            category = Category.liquid;
+            buildVisibility = BuildVisibility.shown;
+            
+            hasLiquids = true;
+            liquidCapacity = 200f;
+            outputsLiquid = true;
+            
+            requirements(Category.liquid, ItemStack.with(VPItems.silver, 45, VPItems.palladium, 20));
         }};
 
         Log.info("[Volta Protocol] ¡Estructuras cargadas perfectamente en memoria!");
