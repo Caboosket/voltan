@@ -9,33 +9,27 @@ For now, there’s only content for Serpulo and the new planet Volta. Since I ha
 
 If you have any suggestions, bug reports, or feedback, feel free to open an issue and I’ll try to address it.
 
-## V0.5 beta: 
+## V0.6: 
 ### Technical changes:
-- **Tech tree:** It was moved back to the Serpulo tree due to technical issues with the new planet.
-- **Code:** Some elements (such as walls, the mod’s central node, and objects) have been moved to Java to improve organization, fix some bugs, and test the functionality of the Java code.
-- **Planet: New Ring:** New ring generation for the planet (the New Horizons Dyson Sphere/Ring generator was used as a reference)
-- **Sector:** Planet sector generation finally works, but it needs quite a few improvements.
+- **Code:** - Compiler update to Java 17 and adapted for Mindustry version v159.
 
 ### Visual changes:
-- New sprites for some blocks
-- New design for the planet (The front brightness issue has finally been fixed)
-- New ring for the planet
-  
+- New sprites (Still working on the mising sprites)
+- **Planet: New Ring:** New ring generation for the planet (the New Horizons Dyson Sphere/Ring generator was used as a reference)
+- **Sector:** Planet sector generation finally works, but it needs quite a few improvements.
 ![picture](github-pictures/planetprogress.png)
 
 ### New content:
-- **A new planet:** “Volta” with one sector has been added (The first sector finally works properly).
-- **New drills:** 4 drills (2 normal and 2 beam drills) were created to complement Volta’s design.
-- **Environment:** New environment blocks for the planet’s design.
-- **Ores:** New silver and palladium ore deposits.
-- *We’re still working on the missing sprites.*
+- New palladium conveyor belts (ducts)
+- New air-based liquid transport system
+- New repair and construction blocks
+- New turret concept: Lorentz Accelerator (WIP)
+<img src="github-pictures/liquid-cargo.png" width="50%">
 
 ---
 
 ### 🧩 Compatibility & Testing / Compatibilidad
 Volta protocol has been tested with the following mods:
-- Fading Revelations Remake
-- New Horizon
 - Gier: Revitalized
 - Warbound Industries
 - Better Vanilla
