@@ -6,6 +6,9 @@ size: 1
 speed: 4
 armored: true
 
+bridgeReplacement: s-1c-palladium-duct-bridge
+junctionReplacement: s-1d-palladium-junction
+
 requirements: [
   vw-2-palladium/2
   vw-1-silver/1
@@ -18,8 +21,8 @@ research: {
   parent: s-1-silver-conveyor
   objectives: [ vw-2-palladium ]
   requirements: [
-    vw-2-palladium/300
-    vw-1-silver/400
-    lead/100
+    vw-2-palladium/120
+    vw-1-silver/80
+    copper/100
   ]
 }
