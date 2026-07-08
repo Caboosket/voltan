@@ -18,7 +18,7 @@ research: {
   parent: s-1a-palladium-duct
   objectives: [ vw-2-palladium ]
   requirements: [
-    vw-2-palladium/300
-    vw-1-silver/400
+    vw-2-palladium/100
+    vw-1-silver/80
   ]
 }
