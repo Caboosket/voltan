@@ -5,6 +5,7 @@ health: 900
 
 hasPower: true
 hasItems: true
+itemCapacity: 24
 hasLiquids: true
 liquidCapacity: 100
 
