@@ -4,9 +4,10 @@ size: 3
 health: 750
 hasPower: true
 hasItems: true
+itemCapacity: 20
 hasLiquids: true
 liquidCapacity: 60
-craftTime: 60
+craftTime: 120
 envEnabled: [any]
 
 ambientSound: loopSmelter
@@ -20,14 +21,14 @@ requirements: [
   vw-1-silver/50
 ],
 
-"research": {   
-		"parent": "b1-a-copper-washer",
-		"objectives": [ "titanium" ]
-"requirements": [
-		"lead/2000",
-		"silicon/1500",
-		"titanium/1900",
-    "vw-1-silver/1200"
+research: {
+  parent: "b1-a-copper-washer"
+  objectives: [ "titanium" ]
+  requirements: [
+    lead/2000
+    silicon/1500
+    titanium/1900
+    vw-1-silver/1200
   ]
 }
 
@@ -35,14 +36,14 @@ consumes: {
   power: 5
   items: {
     items: [
-      lead/5
-      coal/3
+      lead/10
+      coal/5
     ]
   }
 }
 
-outputItem: vw-1-silver/3
-outputLiquid: slag/0.4
+outputItem: vw-1-silver/7
+outputLiquid: slag/0.8
 
 drawer: {
   type: DrawMulti
