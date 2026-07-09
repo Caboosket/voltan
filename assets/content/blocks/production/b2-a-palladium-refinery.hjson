@@ -12,21 +12,21 @@ ambientSound: loopMachineSpin
 ambientSoundVolume: 0.05
 
 requirements: [
-  silicon/180
+  silicon/130
   vw-1-silver/100
   titanium/125
   graphite/70
   copper/ 50
 ],
-"category": "crafting",
-	"research": {
-		"parent": "b1-a-copper-washer",
-		"objectives": [ "titanium" ]
-  "requirements": [
-		"silicon/1000",
-		"vw-1-silver/1500",
-		"graphite/2000",
-    "titanium/1200"
+category: crafting,
+	research: {
+		parent: b1-a-copper-washer,
+		objectives: [ titanium ]
+    requirements: [
+		silicon/1000,
+		vw-1-silver/1200,
+		graphite/1350,
+        titanium/1200
   ]
 }
 
