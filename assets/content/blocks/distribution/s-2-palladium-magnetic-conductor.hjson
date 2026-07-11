@@ -4,8 +4,18 @@ size: 1
 health: 120
 category: distribution
 
-speed: 0.05
+speed: 0.10
 itemCapacity: 20
+
+hasPower: true
+conductivePower: true
+underBullets: true
+
+consumes: {
+  power: 0.04
+}
+
+baseEfficiency: 0.5
 
 requirements: [
   vw-4-bio-composite/1
