@@ -54,17 +54,21 @@ public class VPBlocks {
 
         argentAndesite = new Floor("env-argent-andesite-vp"){{
             localizedName = "Andesita Argenta";
+            attributes.set(Attribute.water, 0.52f);
             variants = 4;
         }};
 
         conductiveSand = new Floor("env-conductive-sand-vp"){{
             localizedName = "Arena Conductora";
+            attributes.set(Attribute.water, 0.6f);
+            attributes.set(Attribute.sand, 0.8f);
             variants = 3;
             speedMultiplier = 0.9f;
         }};
 
         darkAndesite = new Floor("env-dark-andesite-vp"){{
             localizedName = "Andesita Oscura";
+            attributes.set(Attribute.water, 0.5f);
             variants = 3;
         }};
 
@@ -114,7 +118,7 @@ public class VPBlocks {
         voltaicMagma = new Floor("env-voltaic-magma"){{
             localizedName = "Magma Voltaico";
             variants = 3;
-            speedMultiplier = 0.5f;
+            speedMultiplier = 0.7f;
             attributes.set(Attribute.heat, 1.0f); 
             attributes.set(Attribute.water, 0f);
             emitLight = true;
