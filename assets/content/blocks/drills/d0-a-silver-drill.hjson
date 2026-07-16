@@ -29,7 +29,7 @@ requirements: [
 category: production
 
 research: {
-parent: vp-temporal-tt
+parent: mc-1a-modular-core
 requirements: [
   silicon/400
   vw-1-silver/500
