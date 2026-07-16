@@ -11,7 +11,7 @@ hasItems: true
 itemCapacity: 15
 
 ambientSound: loopSpray
-ambientSoundVolume: 0.04
+ambientSoundVolume: 0.03
 
 requirements: [
   copper/120
@@ -21,7 +21,7 @@ requirements: [
 category: crafting
 
 research: {
-  parent: vp-temporal-tt
+  parent: mc-1a-modular-core
   objectives: [ silicon ]
   requirements: [
     copper/1000
