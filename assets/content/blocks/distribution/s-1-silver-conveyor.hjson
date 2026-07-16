@@ -12,7 +12,7 @@ requirements: [
 category: distribution
 
 research: {
-  parent: vp-temporal-tt
+  parent: mc-1a-modular-core
   objectives: [ vw-1-silver ]
   requirements: [
     vw-1-silver/100
