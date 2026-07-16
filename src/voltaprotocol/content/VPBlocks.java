@@ -322,6 +322,7 @@ public class VPBlocks {
                 Items.thorium,     300
             ));
             unitType = VPUnits.kernelDrone;
+            alwaysUnlocked = true;
             size = 4;
             itemCapacity = 10000;
             health = 4000;
