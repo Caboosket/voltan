@@ -339,7 +339,7 @@ public class VPBlocks {
             canOverflow = true;
             
             size = 2;
-            health = 250;
+            health = 300;
             itemCapacity = 300; 
             capacityBonus = 0;
             armorBonus = 1f;
@@ -353,6 +353,7 @@ public class VPBlocks {
             
             size = 3;
             itemCapacity = 1100;
+            health = 550;
             capacityBonus = 0;
             armorBonus = -1f;
             healthBonus = 0f;
@@ -372,7 +373,7 @@ public class VPBlocks {
             
             size = 3;
             health = 800;
-            itemCapacity = 400;
+            itemCapacity = 500;
             capacityBonus = 0;
             armorBonus = 1f;
             healthBonus = -200f;
@@ -414,7 +415,8 @@ public class VPBlocks {
             protocol = ModuleProtocol.DEFENSE;
             
             size = 3;
-            itemCapacity = 700;
+            itemCapacity = 800;
+            health = 900; 
             capacityBonus = 0;
             armorBonus = 1.5f;
             healthBonus = 400f;
@@ -433,6 +435,7 @@ public class VPBlocks {
             itemCapacity = 400;
             capacityBonus = 0;
             armorBonus = 0f;
+            health = 600;
             healthBonus = -400f;
             powerOutput = 1050f;
             maxActive = 2;
