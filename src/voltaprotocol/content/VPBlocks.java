@@ -1,6 +1,7 @@
 package voltaprotocol.content;
 
 import arc.util.Log;
+import mindustry.content.Items;
 import mindustry.content.StatusEffects;
 import mindustry.graphics.CacheLayer;
 import mindustry.type.Category;
@@ -13,7 +14,11 @@ import mindustry.world.blocks.environment.StaticWall;
 import mindustry.world.blocks.environment.SteamVent;
 import mindustry.world.meta.BuildVisibility;
 import voltaprotocol.world.blocks.defense.RegenerativeWall;
+import voltaprotocol.world.blocks.storage.ModularCoreV2;
+import voltaprotocol.world.blocks.storage.ModularModuleV2;
+import voltaprotocol.world.blocks.storage.ModuleProtocol;
 import mindustry.world.meta.Attribute;
+import static mindustry.type.ItemStack.with;
 import voltaprotocol.world.blocks.units.LiquidCargoLoader;
 import voltaprotocol.world.blocks.units.LiquidCargoUnloadPoint;
 
@@ -52,27 +57,27 @@ public class VPBlocks {
     //Distribution
     public static Block liquidCargoLoader;
     public static Block liquidCargoUnloadPoint;
+    //Core
+    public static ModularCoreV2     voltaCore;
+    //Core-Modules
+    public static ModularModuleV2   moduleBasic, moduleGreen, moduleRed, moduleBlue, moduleOrange, moduleSilver;
 
     public static void load(){
         Log.info("[Volta Protocol] Cargando bloques y configurando ingeniería defensiva...");
-
+    //environment
         argentAndesite = new Floor("env-argent-andesite-vp"){{
             localizedName = "Andesita Argenta";
-            attributes.set(Attribute.water, 0.52f);
             variants = 4;
         }};
 
         conductiveSand = new Floor("env-conductive-sand-vp"){{
             localizedName = "Arena Conductora";
-            attributes.set(Attribute.water, 0.6f);
-            attributes.set(Attribute.sand, 0.8f);
             variants = 3;
             speedMultiplier = 0.9f;
         }};
 
         darkAndesite = new Floor("env-dark-andesite-vp"){{
             localizedName = "Andesita Oscura";
-            attributes.set(Attribute.water, 0.5f);
             variants = 3;
         }};
 
@@ -82,7 +87,8 @@ public class VPBlocks {
             liquidDrop = VPLiquids.oxychloride;
             liquidMultiplier = 1.5f;
             variants = 0;
-            speedMultiplier = 0.75f;
+            speedMultiplier = 0.4f;
+            drownTime = 150f;
             status = StatusEffects.corroded;
             statusDuration = 90f;
             cacheLayer = CacheLayer.water; 
@@ -97,7 +103,8 @@ public class VPBlocks {
             liquidDrop = VPLiquids.oxychloride;
             liquidMultiplier = 1.0f;
             variants = 0;
-            speedMultiplier = 0.9f;
+            speedMultiplier = 0.3f;
+            drownTime = 180f;
             status = StatusEffects.corroded;
             statusDuration = 45f;
             cacheLayer = CacheLayer.water; 
@@ -111,7 +118,8 @@ public class VPBlocks {
             liquidDrop = VPLiquids.oxychloride;
             liquidMultiplier = 1.5f;
             variants = 0;
-            speedMultiplier = 0.75f;
+            speedMultiplier = 0.4f;
+            drownTime = 180f;
             status = StatusEffects.corroded;
             statusDuration = 90f;
             cacheLayer = CacheLayer.water; 
@@ -126,7 +134,8 @@ public class VPBlocks {
             liquidDrop = VPLiquids.oxychloride;
             liquidMultiplier = 1.0f;
             variants = 0;
-            speedMultiplier = 0.9f;
+            speedMultiplier = 0.3f;
+            drownTime = 180f;
             status = StatusEffects.corroded;
             statusDuration = 45f;
             cacheLayer = CacheLayer.water; 
@@ -182,7 +191,7 @@ public class VPBlocks {
         voltaicMagma = new Floor("env-voltaic-magma"){{
             localizedName = "Magma Voltaico";
             variants = 3;
-            speedMultiplier = 0.7f;
+            speedMultiplier = 0.5f;
             attributes.set(Attribute.heat, 1.0f); 
             attributes.set(Attribute.water, 0f);
             emitLight = true;
@@ -208,7 +217,7 @@ public class VPBlocks {
             localizedName = "Mena de paladio";
             variants = 3;
         }};
-
+    //defence
         vpTemporalTT = new Block("vp-temporal-tt"){{
             localizedName = "Volta Protocol Core";
             size = 2;
@@ -299,12 +308,151 @@ public class VPBlocks {
             buildVisibility = BuildVisibility.shown;
             
             hasLiquids = true;
-            liquidCapacity = 500f;
+            liquidCapacity = 200f;
             outputsLiquid = true;
             
             requirements(Category.liquid, ItemStack.with(VPItems.silver, 45, VPItems.palladium, 20));
         }};
+        // Core-Modular
+        voltaCore = new ModularCoreV2("mc-1a-modular-core") {{ 
+            requirements(Category.effect, with(
+                VPItems.silver,    500,
+                VPItems.palladium, 200,
+                Items.silicon,     400,
+                Items.thorium,     300
+            ));
+            unitType = VPUnits.kernelDrone;
+            size = 4;
+            itemCapacity = 10000;
+            health = 4000;
+            baseArmor = 4f;
+            maxActiveModules = 6;
+            isFirstTier = false;
+        }};
+                
+        // Modulos
+        moduleBasic = new ModularModuleV2("mm-1a-module-basic") {{
+            requirements(Category.effect, with(VPItems.silver, 40));
+            
+            protocol = ModuleProtocol.STORAGE;
+            canOverflow = true;
+            
+            size = 2;
+            health = 250;
+            itemCapacity = 300; 
+            capacityBonus = 0;
+            armorBonus = 1f;
+            healthBonus = 0f;
+        }};
+                
+        moduleGreen = new ModularModuleV2("mm-1d-module-green") {{
+            requirements(Category.effect, with(VPItems.bioComposite, 80, VPItems.silver, 30));
+            
+            protocol = ModuleProtocol.HEALING;
+            
+            size = 3;
+            itemCapacity = 1100;
+            capacityBonus = 0;
+            armorBonus = -1f;
+            healthBonus = 0f;
+            healRate = 12f;
+            
+            hasGlow = false; 
+            hasActiveGlow = false; 
 
+            healEffect = mindustry.content.Fx.healBlockFull;
+            healEffectChance = 0.04f;
+        }};
+                
+        moduleRed = new ModularModuleV2("mm-1c-module-red") {{
+            requirements(Category.effect, with(VPItems.palladium, 80, VPItems.silver, 20));
+            
+            protocol = ModuleProtocol.ASSAULT;
+            
+            size = 3;
+            health = 800;
+            itemCapacity = 400;
+            capacityBonus = 0;
+            armorBonus = 1f;
+            healthBonus = -200f;
+
+            turretRange = 240f;
+            turretDamage = 135f;
+            turretReload = 150f;
+            ammoItem = VPItems.palladium;
+            ammoPerShot = 3;
+            shootSound = mindustry.gen.Sounds.shootDisperse;
+
+            turretBullet = new mindustry.entities.bullet.BasicBulletType(12f, turretDamage){{
+                width = 8f;        
+                height = 22f;      
+                hitSize = 5f;      
+                lifetime = 20f; 
+                
+                shootEffect = new mindustry.entities.effect.MultiEffect(mindustry.content.Fx.shootBigColor, mindustry.content.Fx.colorSparkBig);
+                smokeEffect = mindustry.content.Fx.shootBigSmoke;
+                
+                frontColor = arc.graphics.Color.white; 
+                backColor = arc.graphics.Color.valueOf("d96c00");
+                hitColor = arc.graphics.Color.valueOf("ffa64d");
+                trailColor = arc.graphics.Color.valueOf("d96c00");
+                trailWidth = 1.7f; 
+                trailLength = 12;
+                hitEffect = mindustry.content.Fx.hitBulletColor;
+                despawnEffect = mindustry.content.Fx.hitBulletColor;
+                
+                pierce = true;
+                pierceCap = 2;
+                pierceBuilding = true;
+            }};
+        }};
+                
+        moduleBlue = new ModularModuleV2("mm-1e-module-blue") {{
+            requirements(Category.effect, with(VPItems.aegesium, 100, VPItems.palladium, 20));
+            
+            protocol = ModuleProtocol.DEFENSE;
+            
+            size = 3;
+            itemCapacity = 700;
+            capacityBonus = 0;
+            armorBonus = 1.5f;
+            healthBonus = 400f;
+            maxActive = 4;
+        }};
+                
+        moduleOrange = new ModularModuleV2("mm-1f-module-orange") {{
+            requirements(Category.effect, with(VPItems.voltium, 60, VPItems.aegesium, 30));
+            
+            protocol = ModuleProtocol.ENERGY;
+            
+            size = 3;
+            hasPower = true;
+            outputsPower = true;
+            consumesPower = false;
+            itemCapacity = 400;
+            capacityBonus = 0;
+            armorBonus = 0f;
+            healthBonus = -400f;
+            powerOutput = 1050f;
+            maxActive = 2;
+
+            ambientSound = mindustry.gen.Sounds.loopPulse;
+            ambientSoundVolume = 0.01f;
+        }};
+                
+        moduleSilver = new ModularModuleV2("mm-1b-module-silver") {{
+            requirements(Category.effect, with(VPItems.silver, 100, VPItems.palladium, 10));
+            
+            protocol = ModuleProtocol.STORAGE;
+            canOverflow = true;
+            
+            size = 3;
+            health = 750;
+            itemCapacity = 1250;
+            capacityBonus = 0;
+            armorBonus = 1f;
+            healthBonus = 200f;
+        }};
         Log.info("[Volta Protocol] ¡Estructuras cargadas perfectamente en memoria!");
     }
 }
