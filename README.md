@@ -9,29 +9,34 @@ For now, there’s only content for Serpulo and the new planet Volta. Since I ha
 
 If you have any suggestions, bug reports, or feedback, feel free to open an issue and I’ll try to address it.
 
-## V0.6: 
+## V0.7: 
 ### Technical changes:
 - **Code:** - Compiler update to Java 17 and adapted for Mindustry version v159.
 
 ### Visual changes:
-- New sprites (Still working on the mising sprites)
+- New sprites and some modifications to old ones (Still working on the mising sprites)
 - **Planet: New Ring:** New ring generation for the planet (the New Horizons Dyson Sphere/Ring generator was used as a reference)
 - **Sector:** Planet sector generation finally works, but it needs quite a few improvements.
-![picture](github-pictures/planetprogress.png)
+<img src="github-pictures/planetprogress.png" width="60%">
 
 ### New content:
-- New palladium conveyor belts (ducts)
-- New air-based liquid transport system
-- New repair and construction blocks
+- New palladium Magnetic Rail
+- New air-based liquid transport system (V2)
+- New Modular Core sistem, all modules work whith any core.
 - New turret concept: Lorentz Accelerator (WIP)
-<img src="github-pictures/liquid-cargo.png" width="50%">
 
+<img src="github-pictures/liquid-cargo.png" width="50%">
+<img src="github-pictures/mcore.png" width="25%">
 ---
 
 ### 🧩 Compatibility & Testing / Compatibilidad
 Volta protocol has been tested with the following mods:
 - Gier: Revitalized
 - Warbound Industries
+- Expanded Industries
+- Better Terrain Gen V2
+- MoreDefenses
+- Modularis
 - Mindustry Tool
 - Simple additions
 
