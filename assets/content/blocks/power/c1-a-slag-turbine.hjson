@@ -76,7 +76,7 @@ drawer: {
 }
 
 research: {
-  parent: vp-temporal-tt
+  parent: mc-1a-modular-core
   "objectives": [ b1-b-cupellation-furnace ]
   requirements: [
     vw-1-silver/1500
