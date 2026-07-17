@@ -56,6 +56,10 @@ drawer: {
     color: 5effb1 
     amount: 8 
     }
+    {
+      type: DrawRegion
+      suffix: -top
+    }
   ]
 }
 
