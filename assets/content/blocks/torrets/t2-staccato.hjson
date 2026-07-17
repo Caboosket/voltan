@@ -99,7 +99,7 @@ ammoTypes: {
     pierceCap: 3
     buildingDamageMultiplier: 0.4
     ammoMultiplier: 2
-    reloadMultiplier: 0.85
+    reloadMultiplier: 0.8
     rangeChange: 20
     frontColor: d1dce6
     backColor: 768a96
@@ -115,7 +115,6 @@ ammoTypes: {
     splashDamage: 45
     splashDamageRadius: 35
     buildingDamageMultiplier: 0.2
-    reloadMultiplier: 1.15
     ammoMultiplier: 3
     status: melting
     statusDuration: 150
@@ -127,8 +126,9 @@ ammoTypes: {
     type: BasicBulletType
     speed: 7.5
     damage: 55
-    reloadMultiplier: 0.9
+    reloadMultiplier: 0.85
     rangeChange: 15
+    armorMultiplier: 0.9
     width: 11
     height: 16
     collidesAir: true
@@ -145,7 +145,7 @@ ammoTypes: {
     type: BasicBulletType
     speed: 9.5
     damage: 50
-    reloadMultiplier: 1.1
+    reloadMultiplier: 1.0
     rangeChange: 25
     width: 10
     height: 18
@@ -159,6 +159,7 @@ ammoTypes: {
     frontColor: 9FE8FF
     backColor: 2D6FA3
     ammoMultiplier: 2
+    armorMultiplier: 0.75
   }
 
   vw-1-silver: {
@@ -214,6 +215,7 @@ ammoTypes: {
     damage: 30
     reloadMultiplier: 1.25
     rangeChange: -15
+    armorMultiplier: 0.8
     width: 12
     height: 14
     collidesAir: true
