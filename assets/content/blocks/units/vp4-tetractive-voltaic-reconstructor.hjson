@@ -17,14 +17,14 @@ consumes: {
 
   items: {
     items: [
-      silicon/850
-      vw-2-palladium/700
+      silicon/820
+      vw-2-palladium/680
       plastanium/550
-      vw-3-aegesium/250
+      vw-3-aegesium/230
     ]
   }
     liquids: [
-        vx-1-oxychloride/1.2
+        vx-1-oxychloride/1.0
       ]
     }
 
