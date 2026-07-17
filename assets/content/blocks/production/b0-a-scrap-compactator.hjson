@@ -32,7 +32,7 @@ consumes: {
   liquid: slag/0.2
 }
 
-outputItem: scrap/2
+outputItem: scrap/4
 
 drawer: {
   type: DrawMulti
