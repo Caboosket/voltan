@@ -53,7 +53,7 @@ drawer: {
     }
     { 
     type: DrawBubbles 
-    color: 5effb1 
+    color: 7af5d4
     amount: 8 
     }
     {
