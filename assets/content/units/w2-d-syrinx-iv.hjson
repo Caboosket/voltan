@@ -5,6 +5,7 @@ health: 5800
 armor: 15
 hitSize: 28
 outlineRadius: 2
+outlineColor: 494956
 
 hovering: true
 canDrown: false
@@ -102,6 +103,10 @@ weapons: [
     alternate: false 
     recoil: 1.5
     shootSound: explosionObviate
+    rotate: true
+    rotateSpeed: 2.2
+    rotationLimit: 20
+    shootCone: 15
     
     bullet: {
       type: ArtilleryBulletType
@@ -139,7 +144,7 @@ weapons: [
     layerOffset: -0.05
     recoil: 0.5
     rotate: true
-    rotationLimit: 20
+    rotationLimit: 10
     rotateSpeed: 3
     
     bullet: {
@@ -159,7 +164,6 @@ weapons: [
     rotateSpeed: 8
     reload: 40
     alternate: true
-    recoil: 1
 
     shoot: {
       type: ShootAlternate
