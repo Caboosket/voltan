@@ -1,10 +1,10 @@
 type: hover
 
-speed: 1.15
+speed: 1.2
 health: 5800
 armor: 15
-hitSize: 32
-outlineRadius: 3
+hitSize: 28
+outlineRadius: 2
 
 hovering: true
 canDrown: false
@@ -12,12 +12,23 @@ shadowElevation: 0.4
 drag: 0.05
 rippleScale: 4.5
 
-engineOffset: 12
-engineSize: 4.5
-engineColor: 84f5f5
+engines: [
+  {
+    x: 5.25
+    y: -16.5
+    radius: 2.5
+    rotation: 270
+  },
+  {
+    x: -5.25
+    y: -17
+    radius: 2.5
+    rotation: 270
+  }
+]
 
-trailLength: 26
-trailColor: 84f5f5
+useEngineElevation: false
+engineColor: 27a1a1
 
 immunities: [
   melting,
@@ -59,26 +70,37 @@ abilities: [
 parts: [
   {
     type: HoverPart
-    x: 12
-    y: -8
+    x: 10.5
+    y: -10
     mirror: true
-    radius: 8
+    radius: 10
     stroke: 3
-    color: ffa64d
+    color: 84f5f5
+    layerOffset: -0.001
+  },
+  {
+    type: HoverPart
+    x: 9.25
+    y: 8.25
+    mirror: true
+    radius: 9
+    stroke: 3
+    color: 84f5f5
     layerOffset: -0.001
   }
 ]
 
 weapons: [
   {
-    name: homeostasis-main
-    x: 8
-    y: 2
+    name: w2-d-syrinx-iv-main
+    x: 7
+    y: -1
     shootX: 0
+    shootY: 10
     reload: 45
     mirror: true
     alternate: false 
-    recoil: 3
+    recoil: 1.5
     shootSound: explosionObviate
     
     bullet: {
@@ -105,21 +127,67 @@ weapons: [
     }
   },
   {
-    name: homeostasis-defense
+    name: w2-d-syrinx-iv-defense
     x: 0
-    y: 12
-    rotate: true
-    rotateSpeed: 6
-    reload: 20
+    y: 13
+    shootY: 4.5
+    rotate: false
+    mirror: false
+    reload: 30
     shootSound: shootLocus
     shootSoundVolume: 0.4
+    layerOffset: -0.05
+    recoil: 0.5
+    rotate: true
+    rotationLimit: 20
+    rotateSpeed: 3
     
     bullet: {
       type: LaserBulletType
-      damage: 45
-      length: 120
-      width: 8
+      damage: 48
+      length: 160
+      width: 9
       colors: [b3ffff, 84f5f5, 5eb1b1]
+    }
+  },
+  {
+    name: w2-d-syrinx-iv-aa-missiles
+    x: 0
+    y: -12
+    mirror: false
+    rotate: true
+    rotateSpeed: 8
+    reload: 40
+    alternate: true
+
+    shoot: {
+      type: ShootAlternate
+      shots: 2
+      shotDelay: 4
+      barrels: 2
+      spread: 4
+    }
+    
+    shootSound: shootMissile
+    shootSoundVolume: 0.3
+
+    bullet: {
+      type: MissileBulletType
+      damage: 20
+      speed: 7
+      lifetime: 29
+      collidesGround: false
+      collidesAir: true
+      
+      homingPower: 0.17
+      homingRange: 120
+      
+      frontColor: e2f2ff
+      backColor: 84f5f5
+      trailColor: 84f5f5
+      
+      status: sapped
+      statusDuration: 45
     }
   }
 ]
