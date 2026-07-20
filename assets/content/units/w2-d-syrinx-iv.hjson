@@ -159,6 +159,7 @@ weapons: [
     rotateSpeed: 8
     reload: 40
     alternate: true
+    recoil: 1
 
     shoot: {
       type: ShootAlternate
