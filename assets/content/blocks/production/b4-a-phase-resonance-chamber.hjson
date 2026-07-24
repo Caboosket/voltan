@@ -76,6 +76,6 @@ drawer: {
 }
 
 ambientSound: loopPulse
-ambientSoundVolume: 0.05
+ambientSoundVolume: 0.03
 
 category: crafting
