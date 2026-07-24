@@ -513,7 +513,7 @@ public class VPBlocks {
             envEnabled = Env.any;
 
             turretRange = 240f;
-            turretDamage = 135f;
+            turretDamage = 200f;
             turretReload = 150f;
             ammoItem = VPItems.palladium;
             ammoPerShot = 3;
