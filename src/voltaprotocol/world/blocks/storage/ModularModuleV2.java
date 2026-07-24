@@ -21,42 +21,42 @@ import voltaprotocol.world.draw.*;
 
 public class ModularModuleV2 extends StorageBlock {
 
-    public ModuleProtocol protocol    = ModuleProtocol.STORAGE;
-    public int            maxActive   = -1;
-    public boolean        canOverflow = false;
+    public ModuleProtocol protocol = ModuleProtocol.STORAGE;
+    public int maxActive = -1;
+    public boolean canOverflow = false;
 
-    public int   capacityBonus = 0;
-    public float armorBonus    = 0f;
-    public float healthBonus   = 0f;
-    public float healRate      = 0f;
-    public float powerOutput   = 0f;
+    public int capacityBonus = 0;
+    public float armorBonus = 0f;
+    public float healthBonus = 0f;
+    public float healRate = 0f;
+    public float powerOutput = 0f;
 
-    public BulletType    turretBullet = Bullets.fireball;
+    public BulletType turretBullet = Bullets.fireball;
     public @Nullable Item ammoItem    = null;
-    public float         turretRange  = 200f;
-    public float         turretDamage = 20f;
-    public float         turretReload = 90f;
-    public int           ammoPerShot  = 3;
+    public float turretRange = 200f;
+    public float turretDamage = 20f;
+    public float turretReload = 90f;
+    public int ammoPerShot  = 3;
     public arc.audio.Sound shootSound = Sounds.none;
-    public Color         heatColor    = Color.valueOf("ff6214");
+    public Color heatColor = Color.valueOf("ff6214");
 
-    public Color plasmaCold        = Color.valueOf("84f5f5");
-    public Color plasmaHot         = Color.valueOf("ff9966");
-    public float plasmaAlpha       = 0.85f;
-    public float reactorLight      = 60f;
+    public Color plasmaCold = Color.valueOf("84f5f5");
+    public Color plasmaHot = Color.valueOf("ff9966");
+    public float plasmaAlpha = 0.85f;
+    public float reactorLight = 60f;
     public float reactorLightAlpha = 0.65f;
 
-    public boolean hasGlow        = false;
-    public boolean hasActiveGlow  = false;
-    public Color   glowColor      = Color.white.cpy();
+    public boolean hasGlow = false;
+    public boolean hasActiveGlow = false;
+    public Color   glowColor = Color.white.cpy();
     public Color   activeGlowColor = new Color(1f, 1f, 1f, 0.7f);
 
-    public @Nullable Effect ambientEffect       = null;
-    public float            ambientEffectChance = 0.04f;
-    public @Nullable Effect activeEffect        = null;
-    public float            activeEffectChance  = 0.06f;
-    public @Nullable Effect healEffect          = null;
-    public float            healEffectChance    = 0.03f;
+    public @Nullable Effect ambientEffect = null;
+    public float ambientEffectChance = 0.04f;
+    public @Nullable Effect activeEffect = null;
+    public float activeEffectChance = 0.06f;
+    public @Nullable Effect healEffect = null;
+    public float healEffectChance = 0.03f;
 
     public DrawBlock drawer = new DrawDefault();
     private TextureRegion previewRegion;
@@ -64,11 +64,11 @@ public class ModularModuleV2 extends StorageBlock {
     public ModularModuleV2(String name) {
         super(name);
 
-        this.drawCached  = false; 
+        this.drawCached = false; 
         this.drawDynamic = true;
-        update       = true;
+        update = true;
         destructible = true;
-        sync         = true;
+        sync = true;
 
         drawer = new DrawMulti(
             new VPDrawBottom(),
@@ -102,19 +102,19 @@ public class ModularModuleV2 extends StorageBlock {
             stats.remove(Stat.itemCapacity);
             stats.add(Stat.itemCapacity, capacityBonus, StatUnit.none);
         }
-        if (armorBonus   != 0f) stats.add(Stat.armor,               armorBonus,    StatUnit.none);
-        if (healthBonus  != 0f) stats.add(Stat.health,              healthBonus,   StatUnit.none);
-        if (healRate      > 0f) stats.add(Stat.repairSpeed,         healRate,      StatUnit.perSecond);
-        if (powerOutput   > 0f) stats.add(Stat.basePowerGeneration, powerOutput,   StatUnit.powerSecond);
+        if (armorBonus != 0f) stats.add(Stat.armor, armorBonus, StatUnit.none);
+        if (healthBonus != 0f) stats.add(Stat.health, healthBonus, StatUnit.none);
+        if (healRate > 0f) stats.add(Stat.repairSpeed, healRate, StatUnit.perSecond);
+        if (powerOutput > 0f) stats.add(Stat.basePowerGeneration, powerOutput, StatUnit.powerSecond);
 
         if (protocol == ModuleProtocol.ASSAULT) {
             stats.add(Stat.shootRange, turretRange / 8f, StatUnit.blocks);
-            stats.add(Stat.damage,     turretDamage);
-            stats.add(Stat.reload,     60f / turretReload, StatUnit.perSecond);
+            stats.add(Stat.damage, turretDamage);
+            stats.add(Stat.reload, 60f / turretReload, StatUnit.perSecond);
             if (ammoItem != null) stats.add(Stat.ammo, StatValues.items(new ItemStack(ammoItem, ammoPerShot)));
         }
 
-        stats.add(new Stat("vpmoduleslots",    StatCat.general), effectiveMaxActive(), StatUnit.none);
+        stats.add(new Stat("vpmoduleslots", StatCat.general), effectiveMaxActive(), StatUnit.none);
         if (canOverflow) stats.add(new Stat("vpmoduleoverflow", StatCat.general), StatValues.bool(true));
     }
 
@@ -134,12 +134,15 @@ public class ModularModuleV2 extends StorageBlock {
 
         // ASSAULT
         public float reloadTimer = 0f;
-        public float rotation    = 90f;
-        public float turretHeat  = 0f;
-        public float recoil      = 0f;
+        public float rotation = 90f;
+        public float turretHeat = 0f;
+        public float recoil = 0f;
+        private @Nullable Unit cachedTarget = null;
+        private float targetSearchTimer = 0f;
+        private static final float TARGET_SEARCH_INTERVAL = 8f;
 
         // ENERGY
-        public float warmup        = 0f;
+        public float warmup = 0f;
         public float totalProgress = 0f;
 
         private ItemModule ownItems;
@@ -252,7 +255,7 @@ public class ModularModuleV2 extends StorageBlock {
             boolean active = activeSlot
                 && (modularCore != null || linkedCore instanceof CoreBuild);
 
-            warmup         = Mathf.lerpDelta(warmup, active ? 1f : 0f, 0.01f);
+            warmup = Mathf.lerpDelta(warmup, active ? 1f : 0f, 0.01f);
             totalProgress += (warmup > 0.001f ? warmup : 0.05f) * Time.delta;
         }
 
@@ -261,16 +264,26 @@ public class ModularModuleV2 extends StorageBlock {
             if (activeCore == null) return;
 
             reloadTimer += edelta();
-            turretHeat   = Mathf.lerpDelta(turretHeat, 0f, 0.09f);
-            recoil       = Mathf.lerpDelta(recoil,     0f, 0.08f);
+            turretHeat = Mathf.lerpDelta(turretHeat, 0f, 0.09f);
+            recoil = Mathf.lerpDelta(recoil, 0f, 0.08f);
 
-            Item ammo    = mb.ammoItem;
+            if (cachedTarget != null && (cachedTarget.dead || !cachedTarget.isAdded()
+                    || !within(cachedTarget, mb.turretRange))) {
+                cachedTarget = null;
+            }
+
+            targetSearchTimer += Time.delta;
+            if (cachedTarget == null && targetSearchTimer >= TARGET_SEARCH_INTERVAL) {
+                targetSearchTimer = 0f;
+                cachedTarget = Units.closestEnemy(team, x, y, mb.turretRange, u -> !u.dead);
+            }
+
+            if (cachedTarget == null) return;
+
+            Item ammo = mb.ammoItem;
             boolean hasAmmo = (ammo == null) || (activeCore.items.get(ammo) >= mb.ammoPerShot);
 
-            Unit target = Units.closestEnemy(team, x, y, mb.turretRange, u -> !u.dead);
-            if (target == null) return;
-
-            float targetAngle = angleTo(target);
+            float targetAngle = angleTo(cachedTarget);
             rotation = Angles.moveToward(rotation, targetAngle, 5f * Time.delta);
 
             if (reloadTimer >= mb.turretReload
@@ -282,8 +295,9 @@ public class ModularModuleV2 extends StorageBlock {
                 mb.shootSound.at(x, y, Mathf.random(0.9f, 1.1f));
                 if (ammo != null) activeCore.items.remove(ammo, mb.ammoPerShot);
                 reloadTimer = 0f;
-                turretHeat  = 1f;
-                recoil      = 1f;
+                turretHeat = 1f;
+                recoil = 1f;
+                targetSearchTimer = TARGET_SEARCH_INTERVAL;
             }
         }
 
@@ -297,8 +311,8 @@ public class ModularModuleV2 extends StorageBlock {
         public float getPowerProduction() {
             if (mb().protocol != ModuleProtocol.ENERGY) return 0f;
             if (!activeSlot) return 0f;
-            if (modularCore != null)               return mb().powerOutput / 60f;
-            if (linkedCore instanceof CoreBuild)   return mb().powerOutput / 60f * 0.9f;
+            if (modularCore != null) return mb().powerOutput / 60f;
+            if (linkedCore instanceof CoreBuild) return mb().powerOutput / 60f * 0.9f;
             return 0f;
         }
 
@@ -363,8 +377,8 @@ public class ModularModuleV2 extends StorageBlock {
 
             ModularCoreBuildV2 core = modularCore;
             modularCore = null;
-            linkedCore  = null;
-            activeSlot  = false;
+            linkedCore = null;
+            activeSlot = false;
 
             super.remove();
 
@@ -390,7 +404,7 @@ public class ModularModuleV2 extends StorageBlock {
             super.read(read, revision);
             activeSlot = read.bool();
             if (mb().protocol == ModuleProtocol.ENERGY) {
-                warmup        = read.f();
+                warmup = read.f();
                 totalProgress = read.f();
             }
         }
