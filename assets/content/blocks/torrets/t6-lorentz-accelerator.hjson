@@ -1,12 +1,17 @@
 type: ItemTurret
+name: Acelerador de Plasma Lorentz
+description: Utiliza potentes campos electromagnéticos para acelerar plasma a velocidades extremas. Dispara un rayo concentrado que perfora defensas y estalla en chispas volátiles al impactar. Diseñado para abatir objetivos de alto blindaje.
 
 size: 4
 health: 3200
 range: 650
+envEnabled: [any]
 
 reload: 300
-recoil: 6
+recoil: 4
 shake: 8
+outlineRadius: 2
+rotateSpeed: 3
 
 shootSound: shootSmite
 shootSoundVolume: 1.0
@@ -16,6 +21,10 @@ unitSort: strongest
 hasLiquids: true
 liquidCapacity: 80
 coolantMultiplier: 0.5
+
+shootWarmupSpeed: 0.04
+warmupMaintainTime: 120
+minWarmup: 0.9
 
 maxAmmo: 30
 ammoPerShot: 3
@@ -34,30 +43,101 @@ drawer: {
   parts: [
     {
       type: RegionPart
-      suffix: -barrel
-      progress: recoil
-      moveY: -4
-      under: false
+      suffix: -side
+      progress: warmup
+      mirror: true
+      moveX: 3
+      moveY: 1
+      moveRot: -25
+      under: true
     }
     {
       type: RegionPart
-      suffix: -glow
+      suffix: -barrel
+      progress: recoil
+      moveY: 2
+      under: true
+    }
+    {
+      type: RegionPart
+      suffix: -heat
       blending: additive
-      progress: charge
-      color: ffffff00
+      progress: heat
+      color: ff9a3c00
       colorTo: ff9a3cff
       outline: false
       under: false
     }
     {
-      type: RegionPart
-      suffix: -side
+      type: ShapePart
       progress: warmup
-      mirror: true
-      moveX: 2.5
-      moveY: -1
-      moveRot: -15
-      under: true
+      color: ff9a3c
+      circle: true
+      hollow: true
+      stroke: 0
+      strokeTo: 1.8
+      radius: 9
+      layer: 110
+      y: -10
+      rotateSpeed: 0.8
+    }
+    {
+      type: ShapePart
+      progress: warmup
+      color: ff9a3c
+      circle: true
+      hollow: true
+      stroke: 0
+      strokeTo: 1.2
+      radius: 4
+      layer: 110
+      y: -10
+      rotateSpeed: -0.8
+    }
+    {
+      type: HaloPart
+      progress: warmup
+      color: ff9a3c
+      layer: 110
+      y: -10
+      haloRotation: 45
+      haloRotateSpeed: 1.2
+      shapes: 4
+      triLength: 0
+      triLengthTo: 14
+      haloRadius: 9
+      tri: true
+      radius: 3
+    }
+    {
+      type: HaloPart
+      progress: warmup
+      color: ff9a3c
+      layer: 110
+      y: -10
+      haloRotation: 45
+      haloRotateSpeed: -1.2
+      shapes: 4
+      shapeRotation: 180
+      triLength: 0
+      triLengthTo: 4
+      haloRadius: 9
+      tri: true
+      radius: 3
+    }
+    {
+      type: HaloPart
+      progress: charge
+      color: ffffff
+      layer: 110
+      y: -10
+      haloRotateSpeed: 2
+      shapes: 3
+      triLength: 0
+      triLengthTo: 8
+      haloRadius: 3
+      tri: true
+      radius: 2
     }
   ]
 }
@@ -180,22 +260,30 @@ vw-5-voltium: {
 }
 
 requirements: [
-  vw-1-silver/500
-  vw-2-palladium/350
-  vw-3-aegesium/200
+  vw-1-silver/700
+  silicon/600
+  titanium/400
+  vw-2-palladium/500
+  vw-3-aegesium/350
   vw-5-voltium/150
+  vw-4-bio-composite/100
 ]
 
 research: {
-  researchCostMultiplier: 0.3
+  researchCostMultiplier: 0.5
   parent: t5-gorgon
-  objectives: [ vw-5-voltium ]
+  objectives: [ 
+    vw-5-voltium
+    vw-4-bio-composite 
+  ]
   requirements: [
-    vw-1-silver/2000
-    vw-2-palladium/1500
-    titanium/2500
-    silicon/2400
+    vw-1-silver/12000
+    silicon/10000
+    vw-2-palladium/8000
+    vw-3-aegesium/3000
+    vw-5-voltium/2500
   ]
 }
 
 category: turret
+
