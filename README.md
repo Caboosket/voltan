@@ -1,5 +1,5 @@
 The mod is still in development, but its goal is to add content that complements the base version of Mindustry with new materials and structures, based on Serpulo’s resources.
-For now, there’s only content for Serpulo and the new planet Volta. Since I haven’t figured out how to enable erekir technology on Volta, I decided to create new blocks that follow its mechanics and resources (still working on it).
+For now, there’s only content for Serpulo and the new planet Volta. I finally managed to make technology from any planet appear in Volta, but I might add more blocks that follow Erekir's mechanics in the future.
 
 ### 🌐 Languages / Idiomas
 - EN **English** (might be some errors)
@@ -9,7 +9,7 @@ For now, there’s only content for Serpulo and the new planet Volta. Since I ha
 
 If you have any suggestions, bug reports, or feedback, feel free to open an issue and I’ll try to address it.
 
-## V0.7: 
+## V0.8: 
 ### Technical changes:
 - **Code:** - Compiler update to Java 17 and adapted for Mindustry version v159.
 
@@ -20,10 +20,12 @@ If you have any suggestions, bug reports, or feedback, feel free to open an issu
 <img src="github-pictures/planetprogress.png" width="60%">
 
 ### New content:
-- New palladium Magnetic Rail
-- New air-based liquid transport system (V2)
+- New palladium conduit family.
+- New liquid overflow/underflow gates (for vanilla and palladium family)
+- New sprite for Homeostasis.
 - New Modular Core sistem, all modules work whith any core.
-- New turret concept: Lorentz Accelerator (WIP)
+- New turret concept: Lorentz Accelerator (WIP).
+- New  environment blocks for Volta.
 
 <img src="github-pictures/liquid-cargo.png" width="50%">
 <img src="github-pictures/mcore.png" width="25%">
