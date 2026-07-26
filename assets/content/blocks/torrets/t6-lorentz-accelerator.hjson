@@ -157,6 +157,9 @@ vw-5-voltium: {
     hitColor: ff9a3c
     ammoMultiplier: 1
 
+    status: fission
+    statusDuration: 360
+
     shootEffect: {
       type: MultiEffect
       effects: [
