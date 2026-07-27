@@ -1,7 +1,7 @@
 type: tank
 health: 11500
 armor: 22
-speed: 0.42
+speed: 0.5
 hitSize: 29
 outlineRadius: 2
 
