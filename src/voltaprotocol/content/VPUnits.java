@@ -52,9 +52,9 @@ public class VPUnits{
         sifon = new LiquidCargoUnitType("w3-a-sifon"){{
             
             flying = true;
-            drag = 0.05f;
+            drag = 0.06f;
             speed = 3.9f;
-            accel = 0.05f;
+            accel = 0.09f;
             health = 250f;
             armor = 0f;
             hitSize = 7f;
@@ -85,7 +85,7 @@ public class VPUnits{
             drag = 0.05f;
             accel = 0.1f;
             engineSize = 2.5f;
-            engineOffset = 5f;
+            engineOffset = 6.5f;
 
             storageSpeed = 2.6f;
             storageMiningSpeed = 1.5f; 
@@ -108,25 +108,25 @@ public class VPUnits{
             }});
 
             weapons.add(new Weapon ("volta-protocol-drone-blaster") {{
-                x = 6f;
+                x = 0f;
                 y = 0f;
+                shootX = 2;
+                shootY = 6;
                 reload = 20f;
                 speed = 3.4f;
                 mineSpeed = 7.5f;
                 mineTier = 2;
-                rotate = true;
-                rotateSpeed = 5f;
                 shootCone = 15f; 
-                rotationLimit = 15;
                 mirror = true;
                 shootSound = Sounds.shootAvert;
                 shootSoundVolume = 0.4f;
-                top = true;
-                layerOffset = 0.05f;
+                top = false;
+                layerOffset = -0.0001f;
                 
                 bullet = new LaserBoltBulletType(5.2f, 15f) {{
                     lifetime = 35f;
                     healPercent = 1f;
+                    homingPower = 0.1f;
                     collidesTeam = true;
                     frontColor = arc.graphics.Color.white;
                     backColor = arc.graphics.Color.valueOf("84f5f5");
