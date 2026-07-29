@@ -30,9 +30,10 @@ research: {
 consumes: {
   power: 6
   items: [
-    phase-fabric/2
+    phase-fabric/1
     vw-2-palladium/2
-    vw-1-silver/3
+    graphite/3
+    thorium/2
   ]
 }
 
